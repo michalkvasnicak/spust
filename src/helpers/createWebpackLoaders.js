@@ -38,7 +38,7 @@ export default function createWebpackLoaders(
             forceEnv: isServer
               ? isDev ? 'serverDev' : 'serverProd'
               : isDev ? 'clientDev' : 'clientProd',
-            presets: [require.resolve(resolvePath(__dirname, '../babel'))],
+            presets: [require.resolve('../babel')],
           },
         },
       ],
