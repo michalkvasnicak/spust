@@ -13,6 +13,18 @@
 yarn add spust
 ```
 
+## Usage
+
+```sh
+# builds bundle for production environment
+yarn spust build
+```
+
+```sh
+# starts webpack dev server and your backend server and opens browser automatically
+yarn spust start
+```
+
 ## Requirements
 
 You have to set up directory structure like this:
