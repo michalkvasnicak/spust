@@ -6,6 +6,7 @@ process.env.NODE_ENV = 'production';
 
 import { resolve as resolvePath } from 'path';
 import { stat } from 'mz/fs';
+import formatWebpackMessages from 'react-dev-utils/formatWebpackMessages';
 import chalk from 'chalk';
 import rimraf from 'rimraf';
 import webpack from 'webpack';
@@ -58,29 +59,28 @@ async function build(dir: string, sourceDir: string) {
 
       const [clientStats, serverStats] = stats.stats;
 
-      const clientInfo = stats.toJson();
-      const serverInfo = stats.toJson();
+      const clientMessages = formatWebpackMessages(clientStats.toJson({}, true));
+      const serverMessages = formatWebpackMessages(serverStats.toJson({}, true));
 
-      if (clientStats.hasErrors() || serverStats.hasErrors()) {
+      if (clientMessages.errors.length || serverMessages.errors.length) {
         console.log(chalk.red('Failed to compile.\n'));
-        console.log([...clientInfo.errors, ...serverInfo.errors].join('\n'));
+        console.log([...clientMessages.errors, ...serverMessages.errors].join('\n'));
         reject();
         return;
       }
 
-      if (stats.hasWarnings()) {
+      if (clientMessages.warnings.length || serverMessages.warnings.length) {
         console.log(chalk.yellow('Compiled with warnings.\n'));
-        console.log([...clientInfo.warnings, ...serverInfo.warnings].join('\n\n'));
+        console.log([...clientMessages.warnings, ...serverMessages.warnings].join('\n\n'));
       }
 
-      // log result
-      resolve([clientInfo, serverInfo]);
+      resolve();
     });
   });
 }
 
 build(workDir, srcDir)
-  .then(([clientInfo, serverInfo]) => {
+  .then(() => {
     console.log(chalk.green('Successfully built. See bundle directory.'));
 
     process.exit(0);
