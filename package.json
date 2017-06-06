@@ -1,13 +1,11 @@
 {
   "name": "spust",
   "version": "0.2.0",
-  "description": "Quickly bootstrap universal javascript applications using 3 commands",
+  "description": "Quickly bootstrap universal javascript applications.",
   "keywords": [
     "webpack",
     "universal",
-    "create-js-app",
-    "create-react-app",
-    "next"
+    "bundler"
   ],
   "main": "index.js",
   "repository": "https://github.com/michalkvasnicak/spust",
