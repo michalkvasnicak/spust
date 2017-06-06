@@ -1,0 +1,121 @@
+#!/usr/bin/env node
+// @flow
+'use strict';
+
+const pkg = require('../package.json');
+const { resolve } = require('path');
+const { watchFile } = require('fs');
+const { spawn } = require('cross-spawn');
+
+const command /*: ?string */ = process.argv[2];
+
+// get current working directory
+const workDir /*: string */ = process.cwd();
+
+const defaultCommand = 'start';
+const commands = new Set(['build', 'help', defaultCommand, 'test', 'version']);
+
+/*::
+export type CommandHandlerArgs = {
+  workDir: string,
+};
+*/
+
+/*::
+type CommandHandlers = {
+  build(args: CommandHandlerArgs): any,
+  help(args: CommandHandlerArgs): any,
+  start(args: CommandHandlerArgs): ChildProcess,
+  test(args: CommandHandlerArgs): any,
+  version(args: CommandHandlerArgs): any,
+};
+*/
+
+function startProcess(bin /*: string*/, args /*: Array<string>*/) /*: ChildProcess */ {
+  const proc = spawn(bin, args, { stdio: 'inherit', customFds: [0, 1, 2] });
+
+  proc.on('close', (code, signal) => {
+    if (code !== null) {
+      process.exit(code);
+    }
+    if (signal) {
+      if (signal === 'SIGKILL') {
+        process.exit(137);
+      }
+      console.log(`got signal ${signal}, exiting`);
+      process.exit(1);
+    }
+    process.exit(0);
+  });
+
+  proc.on('error', err => {
+    onsole.error(err);
+    process.exit(1);
+  });
+
+  return proc;
+}
+
+const commandHandlers /*: CommandHandlers */ = {
+  build: ({ workDir }) => {
+    const srcDir = process.argv[3];
+    return startProcess(
+      resolve(__dirname, '../scripts/build.js'),
+      [workDir, srcDir].filter(Boolean)
+    );
+  },
+  help: () => {
+    console.log(`
+      Usage
+        $ spust <command>
+
+      Available commands:
+        ${Array.from(commands).join(', ')}
+
+      For more information run a command with help subcommand
+        $ spust build help
+    `);
+    process.exit(0);
+  },
+  start: ({ workDir }) => {
+    const srcDir = process.argv[3];
+    return startProcess(
+      resolve(__dirname, '../scripts/start.js'),
+      [workDir, srcDir].filter(Boolean)
+    );
+  },
+  test: () => {},
+  version: () => {
+    console.log(`spust v${pkg.version}`);
+    process.exit(0);
+  },
+};
+
+let cmd = command || defaultCommand;
+
+if (!commands.has(cmd)) {
+  cmd = defaultCommand;
+}
+
+let proc /*: ChildProcess */ = commandHandlers[cmd]({ workDir });
+
+if (cmd === 'start') {
+  // watch for config change
+  watchFile(resolve(workDir, './spust.config.js'), (cur, prev) => {
+    if (cur.size > 0 || prev.size > 0) {
+      console.log('\n > Found a change in spust.config.js, restarting ...');
+
+      proc.removeAllListeners('close');
+      proc.kill();
+      proc = commandHandlers[cmd]({ workDir });
+    }
+  });
+}
+
+['SIGTERM', 'SIGINT'].forEach(signal =>
+  process.on(signal, () => {
+    if (proc != null) {
+      proc.kill(signal);
+    }
+  })
+);
