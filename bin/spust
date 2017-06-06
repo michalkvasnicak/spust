@@ -49,7 +49,7 @@ function startProcess(bin /*: string*/, args /*: Array<string>*/) /*: ChildProce
   });
 
   proc.on('error', err => {
-    onsole.error(err);
+    console.error(err);
     process.exit(1);
   });
 
