@@ -1,6 +1,7 @@
 // @flow
 
 import ExtractTextPlugin from 'extract-text-webpack-plugin';
+import eslintFormatter from 'react-dev-utils/eslintFormatter';
 import { resolve as resolvePath } from 'path';
 
 export default function createWebpackLoaders(
@@ -16,6 +17,7 @@ export default function createWebpackLoaders(
         {
           loader: require.resolve('eslint-loader'),
           options: {
+            formatter: eslintFormatter,
             baseConfig: {
               extends: [require.resolve('eslint-config-react-app')],
             },
