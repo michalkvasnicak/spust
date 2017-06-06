@@ -1,3 +1,7 @@
+node_modules
+scripts
+**/__fixtures__/**/bundle/*
+bundle
 fixtures
 tests
 circle.yml
