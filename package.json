@@ -21,6 +21,7 @@
     "babel-plugin-add-module-exports": "^0.2.1",
     "babel-plugin-transform-flow-strip-types": "^6.22.0",
     "eslint": "^3.19.0",
+    "eslint-config-prettier": "^2.1.1",
     "eslint-plugin-prettier": "^2.1.1",
     "flow-bin": "^0.47.0",
     "flow-copy-source": "^1.1.0",
@@ -123,6 +124,35 @@
       "transform-flow-strip-types",
       "transform-object-rest-spread"
     ]
+  },
+  "eslintConfig": {
+    "env": {
+      "browser": true,
+      "jest": true,
+      "node": true
+    },
+    "extends": [
+      "plugin:flowtype/recommended",
+      "prettier"
+    ],
+    "plugins": [
+      "flowtype",
+      "prettier"
+    ],
+    "rules": {
+      "flowtype/generic-spacing": "off",
+      "flowtype/no-types-missing-file-annotation": "off",
+      "flowtype/space-after-type-colon": "off",
+      "prettier/prettier": [
+        "error",
+        {
+          "trailingComma": "all",
+          "singleQuote": true,
+          "printWidth": 100,
+          "tabWidth": 2
+        }
+      ]
+    }
   },
   "jest": {
     "collectCoverageFrom": [

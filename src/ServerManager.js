@@ -75,7 +75,7 @@ export default class ServerManager {
           // $FlowExpectError
           server.listen(port, '0.0.0.0', undefined, () => {
             console.log('listening on port', port);
-            resolve()
+            resolve();
           });
         });
       } else if (port == null && address == null) {
