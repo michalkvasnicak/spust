@@ -7,6 +7,7 @@ import { spawn } from 'mz/child_process';
 // port used for this test
 process.env.PORT = '4444';
 process.env.WEBPACK_PORT = '4443';
+process.env.SPUST_DO_NOT_OPEN_BROWSER = '1';
 
 describe('start script', () => {
   afterEach(() =>

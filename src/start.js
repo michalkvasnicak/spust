@@ -134,6 +134,11 @@ async function start(dir: string, sourceDir: string) {
       clearConsole();
     }
     console.log(chalk.cyan('Starting the development server...\n'));
+
+    if (process.env.SPUST_DO_NOT_OPEN_BROWSER) {
+      return;
+    }
+
     openBrowser(
       url.format({
         protocol,
