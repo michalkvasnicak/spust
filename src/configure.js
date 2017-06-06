@@ -5,7 +5,6 @@ import { stat, readFile } from 'mz/fs';
 import dotenv from 'dotenv';
 import chalk from 'chalk';
 import nodeExternals from 'webpack-node-externals';
-import ModuleScopePlugin from 'react-dev-utils/ModuleScopePlugin';
 import ServerManager from './ServerManager';
 import webpack from 'webpack';
 
@@ -99,7 +98,6 @@ async function configure({ env, serverManager, srcDir, workDir }: Args): Promise
       },
       resolve: {
         extensions: ['.js', '.json', '.jsx'],
-        plugins: [new ModuleScopePlugin(appDir)],
       },
       module: {
         strictExportPresence: true,
@@ -148,7 +146,6 @@ async function configure({ env, serverManager, srcDir, workDir }: Args): Promise
       },
       resolve: {
         extensions: ['.js', '.json', '.jsx'],
-        plugins: [new ModuleScopePlugin(appDir)],
       },
       module: {
         strictExportPresence: true,
