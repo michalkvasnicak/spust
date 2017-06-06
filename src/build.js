@@ -6,6 +6,7 @@ process.env.NODE_ENV = 'production';
 
 import { resolve as resolvePath } from 'path';
 import { stat } from 'mz/fs';
+import chalk from 'chalk';
 import rimraf from 'rimraf';
 import webpack from 'webpack';
 
@@ -48,8 +49,6 @@ async function build(dir: string, sourceDir: string) {
     }),
   );
 
-  console.log('Started build process');
-
   return await new Promise((resolve, reject) => {
     webpack([config.client, config.server], (err, stats) => {
       if (err) {
@@ -63,12 +62,15 @@ async function build(dir: string, sourceDir: string) {
       const serverInfo = stats.toJson();
 
       if (clientStats.hasErrors() || serverStats.hasErrors()) {
-        reject([...clientInfo.errors, ...serverInfo.errors]);
+        console.log(chalk.red('Failed to compile.\n'));
+        console.log([...clientInfo.errors, ...serverInfo.errors].join('\n'));
+        reject();
         return;
       }
 
       if (stats.hasWarnings()) {
-        console.warn([...clientInfo.warnings, ...serverInfo.warnings]);
+        console.log(chalk.yellow('Compiled with warnings.\n'));
+        console.log([...clientInfo.warnings, ...serverInfo.warnings].join('\n\n'));
       }
 
       // log result
@@ -79,9 +81,14 @@ async function build(dir: string, sourceDir: string) {
 
 build(workDir, srcDir)
   .then(([clientInfo, serverInfo]) => {
+    console.log(chalk.green('Successfully built. See bundle directory.'));
+
     process.exit(0);
   })
   .catch(e => {
-    console.log(e);
+    if (e) {
+      console.log(e);
+    }
+
     process.exit(1);
   });
