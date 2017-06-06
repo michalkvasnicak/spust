@@ -35,10 +35,9 @@ export default function createWebpackLoaders(
           options: {
             babelrc: false,
             cacheDirectory: isDev,
-            forceEnv: isServer
-              ? isDev ? 'serverDev' : 'serverProd'
-              : isDev ? 'clientDev' : 'clientProd',
-            presets: [require.resolve('../babel')],
+            presets: [
+              isServer ? require.resolve('../babel/server') : require.resolve('../babel/client'),
+            ],
           },
         },
       ],

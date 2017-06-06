@@ -76,22 +76,13 @@ const serverEnvPresets = [
 const serverPlugins = [require.resolve('babel-plugin-dynamic-import-node')];
 
 module.exports = {
-  presets: [require.resolve('babel-preset-react')],
   env: {
-    clientDev: {
-      presets: clientEnvPresets,
+    client: {
+      presets: [require.resolve('babel-preset-react'), ...clientEnvPresets],
       plugins,
     },
-    clientProd: {
-      presets: clientEnvPresets,
-      plugins,
-    },
-    serverDev: {
-      presets: serverEnvPresets,
-      plugins: [...plugins, ...serverPlugins],
-    },
-    serverProd: {
-      presets: serverEnvPresets,
+    server: {
+      presets: [require.resolve('babel-preset-react'), ...serverEnvPresets],
       plugins: [...plugins, ...serverPlugins],
     },
   },
