@@ -16,4 +16,5 @@ test:
   override:
     - yarn lint
     - yarn flow
-    - yarn test -- --coverage --coverageDirectory $CIRCLE_ARTIFACTS 
+    - yarn build
+    - yarn test -- --coverage --coverageDirectory $CIRCLE_ARTIFACTS
