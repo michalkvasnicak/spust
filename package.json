@@ -90,7 +90,7 @@
     "postcss-flexbugs-fixes": "^3.0.0",
     "postcss-import": "^10.0.0",
     "postcss-loader": "^2.0.5",
-    "progress-bar-webpack-plugin": "^1.9.3",
+    "progress": "^2.0.0",
     "promise": "^7.1.1",
     "react-dev-utils": "^3.0.0",
     "react-error-overlay": "^1.0.7",
@@ -120,8 +120,14 @@
     ],
     "plugins": [
       "add-module-exports",
+      "transform-class-properties",
       "transform-flow-strip-types",
-      "transform-object-rest-spread"
+      [
+        "transform-object-rest-spread",
+        {
+          "useBuiltIns": true
+        }
+      ]
     ]
   },
   "eslintConfig": {
