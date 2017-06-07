@@ -6,6 +6,7 @@ process.env.NODE_ENV = 'production';
 
 import { resolve as resolvePath } from 'path';
 import { stat } from 'mz/fs';
+import clearConsole from 'react-dev-utils/clearConsole';
 import formatWebpackMessages from 'react-dev-utils/formatWebpackMessages';
 import chalk from 'chalk';
 import rimraf from 'rimraf';
@@ -14,6 +15,8 @@ import webpack from 'webpack';
 
 import configure from './configure';
 
+// $FlowExpectError
+const isInteractive = process.stdout.isTTY;
 const srcDir = process.argv[3] || 'src';
 const workDir: ?string = process.argv[2];
 
@@ -58,6 +61,10 @@ async function build(dir: string, sourceDir: string) {
 
     compiler.run((err, stats) => {
       progress.stop();
+
+      if (isInteractive) {
+        clearConsole();
+      }
 
       if (err) {
         reject(err.stack || err);

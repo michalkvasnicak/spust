@@ -5,4 +5,7 @@ exports[`build script works correctly 1`] = `
 "
 `;
 
-exports[`build script works correctly 2`] = `""`;
+exports[`build script works correctly 2`] = `
+"
+"
+`;
