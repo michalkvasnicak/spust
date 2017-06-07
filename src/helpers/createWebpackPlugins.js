@@ -31,6 +31,9 @@ export default function createWebpackPlugins(
   }
 
   return [
+    // add module names to factory functions so they appear in browser profiler
+    !isServer && isDev ? new webpack.NamedModulesPlugin() : null,
+
     // define variables client side and server side
     new webpack.DefinePlugin(envVariables),
 
@@ -63,7 +66,7 @@ export default function createWebpackPlugins(
     // extract css, only client side and prod
     !isDev && !isServer
       ? new ExtractTextPlugin({
-          filename: '[name]-[contenthash:8].css',
+          filename: 'static/css/[name].[hash:8].[ext]',
           allChunks: true,
         })
       : null,

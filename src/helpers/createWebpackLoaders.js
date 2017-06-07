@@ -128,13 +128,27 @@ export default function createWebpackLoaders(
     // url
     {
       test: /\.(mp4|webm|wav|mp3|m4a|aac|oga)(\?.*)?$/,
-      use: [{ loader: 'url-loader', options: { emitFile: !isServer, limit: 10000 } }],
+      use: [
+        {
+          loader: 'url-loader',
+          options: {
+            emitFile: !isServer,
+            limit: 10000,
+            name: 'static/media/[name].[hash:8].[ext]',
+          },
+        },
+      ],
     },
 
     // file
     {
       test: /\.(ico|jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2)(\?.*)?$/,
-      use: [{ loader: 'file-loader', options: { emitFile: !isServer } }],
+      use: [
+        {
+          loader: 'file-loader',
+          options: { emitFile: !isServer, name: 'static/media/[name].[hash:8].[ext]' },
+        },
+      ],
     },
   ].filter(Boolean);
 }

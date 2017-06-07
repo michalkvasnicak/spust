@@ -15,6 +15,11 @@ import webpack from 'webpack';
 
 import configure from './configure';
 
+// crash on unhandledRejection
+process.on('unhandledRejection', err => {
+  throw err;
+});
+
 // $FlowExpectError
 const isInteractive = process.stdout.isTTY;
 const srcDir = process.argv[3] || 'src';

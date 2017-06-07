@@ -21,6 +21,11 @@ import WebpackDevServer from 'webpack-dev-server';
 
 import configure from './configure';
 
+// crash on unhandledRejection
+process.on('unhandledRejection', err => {
+  throw err;
+});
+
 // $FlowExpectError
 const isInteractive = process.stdout.isTTY;
 const srcDir = process.argv[3] || 'src';
@@ -137,6 +142,7 @@ async function start(dir: string, sourceDir: string) {
   progress.start();
 
   const devServer = new WebpackDevServer(compiler, {
+    contentBase: resolvePath(__dirname, '../'),
     clientLogLevel: 'none',
     compress: true,
     historyApiFallback: {
@@ -146,7 +152,16 @@ async function start(dir: string, sourceDir: string) {
     noInfo: true,
     overlay: false,
     proxy: {
-      '!(/__webpack_hmr|**/*.*)': {
+      '/static': {
+        logLevel: 'silent',
+        target: url.format({
+          protocol,
+          hostname: 'localhost',
+          port: webpackPort,
+        }),
+        pathRewrite: path => path.replace('static', 'client/static'),
+      },
+      '!/sockjs-node/**': {
         target,
         logLevel: 'silent',
         onProxyReq: proxyReq => {
@@ -186,6 +201,7 @@ async function start(dir: string, sourceDir: string) {
         xfwd: true,
       },
     },
+    publicPath: '/',
     quiet: true,
     setup(app) {
       // This lets us open files from the runtime error overlay.

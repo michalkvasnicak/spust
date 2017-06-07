@@ -61,9 +61,13 @@ type Args = {
 async function configure({ env, serverManager, srcDir, workDir }: Args): Promise<Configuration> {
   const isDev = env === 'development';
   const appDir = resolvePath(workDir, srcDir);
+  const clientBundlePath = resolvePath(workDir, './bundle/client');
+  const serverBundlePath = resolvePath(workDir, './bundle/server');
 
   const envVariables = {
-    'process.env': {
+    'process.env': JSON.stringify({
+      // provide full path to webpack-assets.json so you can easily load it server side
+      ASSETS_JSON_PATH: resolvePath(serverBundlePath, 'webpack-assets.json'),
       NODE_ENV: env,
       // this is set in build.js or start.js, you can override it using env variables
       // but we will force this PORT during development to ensure
@@ -73,11 +77,8 @@ async function configure({ env, serverManager, srcDir, workDir }: Args): Promise
       // force port from start.js during development
       // because of proxying requests
       ...(isDev ? { PORT: process.env.PORT } : {}),
-    },
+    }),
   };
-
-  const clientBundlePath = resolvePath(workDir, './bundle/client');
-  const serverBundlePath = resolvePath(workDir, './bundle/server');
 
   return {
     client: {
@@ -85,14 +86,16 @@ async function configure({ env, serverManager, srcDir, workDir }: Args): Promise
       devtool: isDev ? 'eval' : 'source-map',
       entry: [
         isDev ? require.resolve('react-dev-utils/webpackHotDevClient') : null,
-        isDev ? require.resolve('react-error-overlay') : null,
         require.resolve('./polyfills/client'),
+        isDev ? require.resolve('react-error-overlay') : null,
         resolvePath(appDir, './client/index.js'),
       ].filter(Boolean),
       output: {
-        filename: isDev ? '[name].js' : '[name]-[chunkhash].js',
-        libraryTarget: 'commonjs2',
+        filename: isDev ? 'static/js/[name].js' : 'static/js/[name].[chunkhash:8].js',
+        chunkFilename: 'static/js/[name].[chunkhash:8].js',
+        libraryTarget: 'var',
         path: clientBundlePath,
+        pathinfo: isDev,
         publicPath: '/',
         devtoolModuleFilenameTemplate: info => relativePath(appDir, info.absoluteResourcePath),
       },
@@ -150,6 +153,10 @@ async function configure({ env, serverManager, srcDir, workDir }: Args): Promise
       module: {
         strictExportPresence: true,
         rules: createWebpackLoaders({ appDir, isDev, isServer: true }, envVariables),
+      },
+      node: {
+        __dirname: true,
+        __filename: true,
       },
       plugins: createWebpackPlugins(
         { isDev, isServer: true, serverBundlePath, serverManager },
