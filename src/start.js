@@ -12,6 +12,7 @@ import clearConsole from 'react-dev-utils/clearConsole';
 import errorOverlayMiddleware from 'react-error-overlay/middleware';
 import formatWebpackMessages from 'react-dev-utils/formatWebpackMessages';
 import openBrowser from 'react-dev-utils/openBrowser';
+import Progress from './Progress';
 import rimraf from 'rimraf';
 import ServerManager from './ServerManager';
 import url from 'url';
@@ -82,15 +83,19 @@ async function start(dir: string, sourceDir: string) {
   const compiler = webpack([config.client, config.server]);
   const target = `http://localhost:${serverPort}`;
 
+  const progress = new Progress(compiler.compilers);
+
   compiler.plugin('invalid', () => {
     if (isInteractive) {
       clearConsole();
     }
 
-    console.log('Compiling...');
+    progress.start();
   });
 
   compiler.plugin('done', stats => {
+    progress.stop();
+
     if (isInteractive) {
       clearConsole();
     }
@@ -120,6 +125,8 @@ async function start(dir: string, sourceDir: string) {
       console.log(chalk.green('Compiled successfully!'));
     }
   });
+
+  progress.start();
 
   const devServer = new WebpackDevServer(compiler, {
     clientLogLevel: 'none',
@@ -185,9 +192,11 @@ async function start(dir: string, sourceDir: string) {
     if (err) {
       return console.log(err);
     }
+
     if (isInteractive) {
       clearConsole();
     }
+
     console.log(chalk.cyan('Starting the development server...\n'));
 
     if (process.env.SPUST_DO_NOT_OPEN_BROWSER) {
