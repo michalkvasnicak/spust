@@ -35,6 +35,7 @@ async function start(dir: string, sourceDir: string) {
   const DEFAULT_SERVER_PORT = parseInt(process.env.PORT, 10) || 3000;
   const HOST = process.env.HOST || 'localhost';
   const protocol = process.env.HTTPS === 'true' ? 'https' : 'http';
+  let isCompiled = false;
 
   const webpackPort: number = await choosePort(HOST, DEFAULT_PORT);
   const serverPort: number = await choosePort(HOST, DEFAULT_SERVER_PORT);
@@ -78,7 +79,9 @@ async function start(dir: string, sourceDir: string) {
     }),
   );
 
-  console.log('Started build process');
+  // because ServerListenerPlugin is overriding console.log so your server script can't output
+  // anything using console.log until the management of server is done by ServerManager
+  const log = console.log;
 
   const compiler = webpack([config.client, config.server]);
   const target = `http://localhost:${serverPort}`;
@@ -94,6 +97,7 @@ async function start(dir: string, sourceDir: string) {
   });
 
   compiler.plugin('done', stats => {
+    isCompiled = true;
     progress.stop();
 
     if (isInteractive) {
@@ -106,14 +110,14 @@ async function start(dir: string, sourceDir: string) {
     const serverMessages = formatWebpackMessages(serverStats.toJson({}, true));
 
     if (clientMessages.errors.length || serverMessages.errors.length) {
-      console.log(chalk.red('Failed to compile.\n'));
-      console.log([...clientMessages.errors, ...serverMessages.errors].join('\n'));
+      log(chalk.red('Failed to compile.\n'));
+      log([...clientMessages.errors, ...serverMessages.errors].join('\n'));
       return;
     }
 
     if (clientMessages.warnings.length || serverMessages.warnings.length) {
-      console.log(chalk.yellow('Compiled with warnings.\n'));
-      console.log([...clientMessages.warnings, ...serverMessages.warnings].join('\n\n'));
+      log(chalk.yellow('Compiled with warnings.\n'));
+      log([...clientMessages.warnings, ...serverMessages.warnings].join('\n\n'));
     }
 
     if (
@@ -122,7 +126,11 @@ async function start(dir: string, sourceDir: string) {
       !clientMessages.warnings.length &&
       !serverMessages.warnings.length
     ) {
-      console.log(chalk.green('Compiled successfully!'));
+      if (isCompiled) {
+        log(chalk.green('Compiled successfully!'));
+      } else {
+        log(chalk.green('Updated successfully!'));
+      }
     }
   });
 
@@ -148,7 +156,7 @@ async function start(dir: string, sourceDir: string) {
         },
         onProxyError: (err, req, res) => {
           const host = req.headers && req.headers.host;
-          console.log(
+          log(
             chalk.red('Proxy error:') +
               ' Could not proxy request ' +
               chalk.cyan(req.url) +
@@ -158,12 +166,12 @@ async function start(dir: string, sourceDir: string) {
               chalk.cyan(target) +
               '.',
           );
-          console.log(
+          log(
             'See https://nodejs.org/api/errors.html#errors_common_system_errors for more information (' +
               chalk.cyan(err.code) +
               ').',
           );
-          console.log();
+          log();
 
           // And immediately send the proper error response to the client.
           // Otherwise, the request will eventually timeout with ERR_EMPTY_RESPONSE on the client side.
@@ -190,14 +198,14 @@ async function start(dir: string, sourceDir: string) {
 
   devServer.listen(webpackPort, HOST, err => {
     if (err) {
-      return console.log(err);
+      return log(err);
     }
 
     if (isInteractive) {
       clearConsole();
     }
 
-    console.log(chalk.cyan('Starting the development server...\n'));
+    log(chalk.cyan('Starting the development server...\n'));
 
     if (process.env.SPUST_DO_NOT_OPEN_BROWSER) {
       return;

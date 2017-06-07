@@ -1,12 +1,9 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`start script works correctly 1`] = `
-"Started build process
-Starting the development server...
+"Starting the development server...
 
-listening on 3001
-listening on port 4444
-Build complete
+Compiled successfully!
 "
 `;
 

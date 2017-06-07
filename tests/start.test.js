@@ -47,7 +47,7 @@ describe('start script', () => {
     proc.stdout.on('data', data => {
       output.push(data);
 
-      if (output.join('').indexOf('Build complete') !== -1) {
+      if (output.join('').indexOf('Compiled successfully!') !== -1) {
         proc.kill('SIGINT');
       }
     });

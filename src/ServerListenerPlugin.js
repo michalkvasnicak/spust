@@ -31,6 +31,11 @@ module.exports = class ServerListenerPlugin {
         compiler.options.output.filename,
       );
 
+      // prevent server script from outputting any console info
+      const originalConsoleLog = console.log;
+      // $FlowExpectError
+      console.log = () => {};
+
       // start server
       try {
         const serverSource = Buffer.from(
@@ -40,12 +45,13 @@ module.exports = class ServerListenerPlugin {
         const server = eval(serverSource);
 
         await this.serverManager.manage(server.default || server);
-
-        console.log('Build complete');
       } catch (e) {
         console.log(e);
 
         throw e;
+      } finally {
+        // $FlowExpectError
+        console.log = originalConsoleLog;
       }
     });
   }
