@@ -46,6 +46,15 @@ export default function createWebpackPlugins(
     // watch missing node modules plugin, only dev, both sides
     isDev ? new WatchMissingNodeModulesPlugin() : null,
 
+    // make everything that is pointed from 2 and more places a chunk
+    !isDev && !isServer
+      ? new webpack.optimize.CommonsChunkPlugin({
+          async: true,
+          children: true,
+          minChunks: (module, count) => count >= 2,
+        })
+      : null,
+
     // uglify js, only client side and prod mode
     !isDev && !isServer
       ? new webpack.optimize.UglifyJsPlugin({
