@@ -9,6 +9,7 @@ import { stat } from 'mz/fs';
 import formatWebpackMessages from 'react-dev-utils/formatWebpackMessages';
 import chalk from 'chalk';
 import rimraf from 'rimraf';
+import Progress from './Progress';
 import webpack from 'webpack';
 
 import configure from './configure';
@@ -51,7 +52,13 @@ async function build(dir: string, sourceDir: string) {
   );
 
   return await new Promise((resolve, reject) => {
-    webpack([config.client, config.server], (err, stats) => {
+    const compiler = webpack([config.client, config.server]);
+    const progress = new Progress(compiler.compilers);
+    progress.start();
+
+    compiler.run((err, stats) => {
+      progress.stop();
+
       if (err) {
         reject(err.stack || err);
         return;
