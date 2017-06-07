@@ -9,6 +9,8 @@ import { stat } from 'mz/fs';
 import { choosePort } from 'react-dev-utils/WebpackDevServerUtils';
 import chalk from 'chalk';
 import clearConsole from 'react-dev-utils/clearConsole';
+import errorOverlayMiddleware from 'react-error-overlay/middleware';
+import formatWebpackMessages from 'react-dev-utils/formatWebpackMessages';
 import openBrowser from 'react-dev-utils/openBrowser';
 import rimraf from 'rimraf';
 import ServerManager from './ServerManager';
@@ -80,13 +82,58 @@ async function start(dir: string, sourceDir: string) {
   const compiler = webpack([config.client, config.server]);
   const target = `http://localhost:${serverPort}`;
 
+  compiler.plugin('invalid', () => {
+    if (isInteractive) {
+      clearConsole();
+    }
+
+    console.log('Compiling...');
+  });
+
+  compiler.plugin('done', stats => {
+    if (isInteractive) {
+      clearConsole();
+    }
+
+    const [clientStats, serverStats] = stats.stats;
+
+    const clientMessages = formatWebpackMessages(clientStats.toJson({}, true));
+    const serverMessages = formatWebpackMessages(serverStats.toJson({}, true));
+
+    if (clientMessages.errors.length || serverMessages.errors.length) {
+      console.log(chalk.red('Failed to compile.\n'));
+      console.log([...clientMessages.errors, ...serverMessages.errors].join('\n'));
+      return;
+    }
+
+    if (clientMessages.warnings.length || serverMessages.warnings.length) {
+      console.log(chalk.yellow('Compiled with warnings.\n'));
+      console.log([...clientMessages.warnings, ...serverMessages.warnings].join('\n\n'));
+    }
+
+    if (
+      !clientMessages.errors.length &&
+      !serverMessages.errors.length &&
+      !clientMessages.warnings.length &&
+      !serverMessages.warnings.length
+    ) {
+      console.log(chalk.green('Compiled successfully!'));
+    }
+  });
+
   const devServer = new WebpackDevServer(compiler, {
     clientLogLevel: 'none',
+    compress: true,
+    historyApiFallback: {
+      disableDotRule: true,
+    },
+    hot: true,
     noInfo: true,
+    overlay: false,
     proxy: {
       '!(/__webpack_hmr|**/*.*)': {
         target,
-        // logLevel: 'silent',
+        logLevel: 'silent',
         onProxyReq: proxyReq => {
           if (proxyReq.getHeader('origin')) {
             proxyReq.setHeader('origin', target);
@@ -123,6 +170,14 @@ async function start(dir: string, sourceDir: string) {
         ws: true,
         xfwd: true,
       },
+    },
+    quiet: true,
+    setup(app) {
+      // This lets us open files from the runtime error overlay.
+      app.use(errorOverlayMiddleware());
+    },
+    watchOptions: {
+      ignored: /node_modules/,
     },
   });
 
