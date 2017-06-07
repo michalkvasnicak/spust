@@ -64,21 +64,24 @@ async function configure({ env, serverManager, srcDir, workDir }: Args): Promise
   const clientBundlePath = resolvePath(workDir, './bundle/client');
   const serverBundlePath = resolvePath(workDir, './bundle/server');
 
-  const envVariables = {
-    'process.env': JSON.stringify({
-      // provide full path to webpack-assets.json so you can easily load it server side
-      ASSETS_JSON_PATH: resolvePath(serverBundlePath, 'webpack-assets.json'),
-      NODE_ENV: env,
-      // this is set in build.js or start.js, you can override it using env variables
-      // but we will force this PORT during development to ensure
-      // that your backend is running on the given port so we can proxy requests easily
-      PORT: process.env.PORT,
-      ...loadEnvVariables(workDir),
-      // force port from start.js during development
-      // because of proxying requests
-      ...(isDev ? { PORT: process.env.PORT } : {}),
-    }),
+  const variables = {
+    // provide full path to webpack-assets.json so you can easily load it server side
+    ASSETS_JSON_PATH: resolvePath(serverBundlePath, 'webpack-assets.json'),
+    NODE_ENV: env,
+    // this is set in build.js or start.js, you can override it using env variables
+    // but we will force this PORT during development to ensure
+    // that your backend is running on the given port so we can proxy requests easily
+    PORT: process.env.PORT,
+    ...loadEnvVariables(workDir),
+    // force port from start.js during development
+    // because of proxying requests
+    ...(isDev ? { PORT: process.env.PORT } : {}),
   };
+
+  const envVariables = Object.keys(variables).reduce(
+    (res, key) => ({ ...res, [`process.env.${key}`]: JSON.stringify(variables[key]) }),
+    {},
+  );
 
   return {
     client: {
