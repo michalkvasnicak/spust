@@ -66,7 +66,7 @@ export default function createWebpackPlugins(
     // extract css, only client side and prod
     !isDev && !isServer
       ? new ExtractTextPlugin({
-          filename: 'static/css/[name].[hash:8].[ext]',
+          filename: 'static/css/[name].[hash:8].css',
           allChunks: true,
         })
       : null,
