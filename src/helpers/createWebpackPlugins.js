@@ -6,7 +6,6 @@ import CompressionPlugin from 'compression-webpack-plugin';
 import ExtractTextPlugin from 'extract-text-webpack-plugin';
 import chalk from 'chalk';
 import OfflinePlugin from 'offline-plugin';
-import ProgressBarPlugin from 'progress-bar-webpack-plugin';
 import ServerManager from '../ServerManager';
 import ServerListenerPlugin from '../ServerListenerPlugin';
 import WatchMissingNodeModulesPlugin from 'react-dev-utils/WatchMissingNodeModulesPlugin';
@@ -32,14 +31,6 @@ export default function createWebpackPlugins(
   }
 
   return [
-    // client side and server side
-    new ProgressBarPlugin({
-      format: ` ${isServer ? 'server' : 'client'} build [:bar] ${chalk.green.bold(
-        ':percent',
-      )} (:elapsed seconds)`,
-      clear: false,
-    }),
-
     // define variables client side and server side
     new webpack.DefinePlugin(envVariables),
 
