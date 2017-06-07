@@ -127,7 +127,7 @@ export default function createWebpackLoaders(
 
     // url
     {
-      test: /\.(mp4|webm|wav|mp3|m4a|aac|oga)(\?.*)?$/,
+      test: [/\.bmp$/, /\.gif$/, /\.jpe?g$/, /\.png$/],
       use: [
         {
           loader: 'url-loader',
@@ -142,7 +142,16 @@ export default function createWebpackLoaders(
 
     // file
     {
-      test: /\.(ico|jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2)(\?.*)?$/,
+      exclude: [
+        /\.html$/,
+        /\.(js|jsx)$/,
+        /\.css$/,
+        /\.json$/,
+        /\.bmp$/,
+        /\.gif$/,
+        /\.jpe?g$/,
+        /\.png$/,
+      ],
       use: [
         {
           loader: 'file-loader',
