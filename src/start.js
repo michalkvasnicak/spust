@@ -67,7 +67,12 @@ async function start(dir: string, sourceDir: string) {
     delete require.cache[require.resolve(configPath)];
     let customConfigure = require(configPath);
 
-    config = customConfigure(config);
+    config = customConfigure(config, {
+      workDir: dir,
+      srcDir: sourceDir,
+      env: 'development',
+      serverManager,
+    });
   } catch (e) {
     if (e.code !== 'ENOENT') {
       throw e;

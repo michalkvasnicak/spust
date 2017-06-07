@@ -42,7 +42,7 @@ async function build(dir: string, sourceDir: string) {
     delete require.cache[require.resolve(configPath)];
     let customConfigure = require(configPath);
 
-    config = customConfigure(config);
+    config = customConfigure(config, { workDir: dir, srcDir: sourceDir, env: 'production' });
   } catch (e) {
     if (e.code !== 'ENOENT') {
       throw e;
