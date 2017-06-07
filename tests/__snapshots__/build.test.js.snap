@@ -1,7 +1,10 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`build script works correctly 1`] = `
-"Successfully built. See bundle directory.
+"Compiled with warnings.
+
+OfflinePlugin: Cache pattern [**/*.css] did not match any assets
+Successfully built. See bundle directory.
 "
 `;
 
