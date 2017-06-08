@@ -71,7 +71,7 @@ export default function createWebpackLoaders(
                 },
               },
               {
-                loader: 'postcss-loader',
+                loader: require.resolve('postcss-loader'),
                 options: {
                   ident: 'postcss',
                   plugins: loader => [
@@ -87,10 +87,9 @@ export default function createWebpackLoaders(
               },
             ],
           },
-      // client side css compilation
-      isServer
-        ? {}
-        : {
+      // client side production css compilation
+      !isServer && !isDev
+        ? {
             use: ExtractTextPlugin.extract({
               fallback: require.resolve('style-loader'),
               use: [
@@ -99,14 +98,14 @@ export default function createWebpackLoaders(
                   options: {
                     autoprefixer: false,
                     importLoaders: 1,
-                    localIdentName: isDev ? '[name]__[local]__[hash:base64:5]' : '[hash:base64]',
+                    localIdentName: '[hash:base64]',
                     minimize: !isDev,
                     modules: true,
                     sourceMap: !isDev,
                   },
                 },
                 {
-                  loader: 'postcss-loader',
+                  loader: require.resolve('postcss-loader'),
                   options: {
                     ident: 'postcss',
                     plugins: loader => [
@@ -122,7 +121,42 @@ export default function createWebpackLoaders(
                 },
               ],
             }),
-          },
+          }
+        : {},
+      // client side development css compilation
+      !isServer && isDev
+        ? {
+            use: [
+              require.resolve('style-loader'),
+              {
+                loader: require.resolve('css-loader'),
+                options: {
+                  autoprefixer: false,
+                  importLoaders: 1,
+                  localIdentName: '[name]__[local]__[hash:base64:5]',
+                  minimize: !isDev,
+                  modules: true,
+                  sourceMap: !isDev,
+                },
+              },
+              {
+                loader: require.resolve('postcss-loader'),
+                options: {
+                  ident: 'postcss',
+                  plugins: loader => [
+                    require('postcss-flexbugs-fixes'),
+                    require('postcss-import')({ root: loader.resourcePath }),
+                    require('postcss-cssnext')({
+                      browsers: ['>1%', 'last 4 versions', 'Firefox ESR', 'not ie < 10'],
+                      flexbox: 'no-2009',
+                    }),
+                    require('postcss-apply')(),
+                  ],
+                },
+              },
+            ],
+          }
+        : {},
     ),
 
     // url
