@@ -73,7 +73,7 @@ async function configure({ env, serverManager, srcDir, workDir }: Args): Promise
     // but we will force this PORT during development to ensure
     // that your backend is running on the given port so we can proxy requests easily
     PORT: process.env.PORT,
-    ...loadEnvVariables(workDir),
+    ...(await loadEnvVariables(workDir)),
     // force port from start.js during development
     // because of proxying requests
     ...(isDev ? { PORT: process.env.PORT } : {}),
