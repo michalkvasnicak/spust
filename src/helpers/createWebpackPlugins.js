@@ -35,7 +35,11 @@ export default function createWebpackPlugins(
     !isServer && isDev ? new webpack.NamedModulesPlugin() : null,
 
     // define variables client side and server side
-    new webpack.DefinePlugin(envVariables),
+    new webpack.DefinePlugin({
+      ...envVariables,
+      'process.env.IS_SERVER': JSON.stringify(isServer),
+      'process.env.IS_CLIENT': JSON.stringify(!isServer),
+    }),
 
     // hot module replacement, only client side and dev
     isDev && !isServer ? new webpack.HotModuleReplacementPlugin() : null,
