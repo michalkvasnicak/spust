@@ -55,9 +55,8 @@ export default function createWebpackLoaders(
     Object.assign(
       { test: /\.css$/, use: [] },
       // server side css compilation
-      !isServer
-        ? {}
-        : {
+      isServer
+        ? {
             use: [
               {
                 loader: require.resolve('css-loader/locals'),
@@ -86,7 +85,8 @@ export default function createWebpackLoaders(
                 },
               },
             ],
-          },
+          }
+        : {},
       // client side production css compilation
       !isServer && !isDev
         ? {
