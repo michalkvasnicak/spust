@@ -74,13 +74,13 @@ export default function createWebpackLoaders(
                 options: {
                   ident: 'postcss',
                   plugins: loader => [
-                    require('postcss-flexbugs-fixes'),
-                    require('postcss-import')({ root: loader.resourcePath }),
+                    require('postcss-flexbugs-fixes')(),
+                    require('postcss-import')(),
                     require('postcss-cssnext')({
                       browsers: ['>1%', 'last 4 versions', 'Firefox ESR', 'not ie < 10'],
                       flexbox: 'no-2009',
                     }),
-                    require('postcss-apply')(),
+                    require('postcss-nested')(),
                   ],
                 },
               },
@@ -109,13 +109,13 @@ export default function createWebpackLoaders(
                   options: {
                     ident: 'postcss',
                     plugins: loader => [
-                      require('postcss-flexbugs-fixes'),
-                      require('postcss-import')({ root: loader.resourcePath }),
+                      require('postcss-flexbugs-fixes')(),
+                      require('postcss-import')(),
                       require('postcss-cssnext')({
                         browsers: ['>1%', 'last 4 versions', 'Firefox ESR', 'not ie < 10'],
                         flexbox: 'no-2009',
                       }),
-                      require('postcss-apply')(),
+                      require('postcss-nested')(),
                     ],
                   },
                 },
@@ -144,13 +144,13 @@ export default function createWebpackLoaders(
                 options: {
                   ident: 'postcss',
                   plugins: loader => [
-                    require('postcss-flexbugs-fixes'),
-                    require('postcss-import')({ root: loader.resourcePath }),
+                    require('postcss-flexbugs-fixes')(),
+                    require('postcss-import')(),
                     require('postcss-cssnext')({
                       browsers: ['>1%', 'last 4 versions', 'Firefox ESR', 'not ie < 10'],
                       flexbox: 'no-2009',
                     }),
-                    require('postcss-apply')(),
+                    require('postcss-nested')(),
                   ],
                 },
               },
