@@ -79,7 +79,10 @@ module.exports = {
   env: {
     client: {
       presets: [require.resolve('babel-preset-react'), ...clientEnvPresets],
-      plugins,
+      plugins: [
+        ...plugins,
+        [require.resolve('babel-plugin-transform-regenerator'), { async: false }],
+      ],
     },
     server: {
       presets: [require.resolve('babel-preset-react'), ...serverEnvPresets],
