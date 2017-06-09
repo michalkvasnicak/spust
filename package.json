@@ -1,6 +1,6 @@
 {
   "name": "spust",
-  "version": "0.4.5",
+  "version": "0.4.6",
   "description": "Quickly bootstrap universal javascript applications.",
   "keywords": [
     "webpack",
@@ -85,11 +85,11 @@
     "node-fetch": "^1.7.1",
     "object-assign": "^4.1.1",
     "offline-plugin": "^4.8.1",
-    "postcss-apply": "^0.8.0",
     "postcss-cssnext": "^2.11.0",
     "postcss-flexbugs-fixes": "^3.0.0",
     "postcss-import": "^10.0.0",
     "postcss-loader": "^2.0.5",
+    "postcss-nested": "^2.0.2",
     "progress": "^2.0.0",
     "promise": "^7.1.1",
     "react-dev-utils": "^3.0.0",
