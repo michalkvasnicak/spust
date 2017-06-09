@@ -1,6 +1,6 @@
 // @flow
 
-import { relative as relativePath, resolve as resolvePath } from 'path';
+import { dirname, relative as relativePath, resolve as resolvePath } from 'path';
 import { stat, readFile } from 'mz/fs';
 import dotenv from 'dotenv';
 import chalk from 'chalk';
@@ -87,11 +87,11 @@ async function configure({ env, serverManager, srcDir, workDir }: Args): Promise
   return {
     client: {
       bail: !isDev,
-      devtool: isDev ? 'eval' : 'source-map',
+      devtool: isDev ? 'cheap-module-source-map' : 'source-map',
       entry: [
         isDev ? require.resolve('react-dev-utils/webpackHotDevClient') : null,
         require.resolve('./polyfills/client'),
-        isDev ? require.resolve('react-error-overlay') : null,
+        /* isDev ? require.resolve('react-error-overlay') : null, */
         resolvePath(appDir, './client/index.js'),
       ].filter(Boolean),
       output: {
@@ -101,10 +101,15 @@ async function configure({ env, serverManager, srcDir, workDir }: Args): Promise
         path: clientBundlePath,
         pathinfo: isDev,
         publicPath: '/',
-        devtoolModuleFilenameTemplate: info => relativePath(appDir, info.absoluteResourcePath),
+        devtoolModuleFilenameTemplate: isDev
+          ? info => resolvePath(info.absoluteResourcePath)
+          : info => relativePath(appDir, info.absoluteResourcePath),
       },
       resolve: {
         extensions: ['.js', '.json', '.jsx'],
+        alias: {
+          'babel-runtime': dirname(require.resolve('babel-runtime/package.json')),
+        },
       },
       module: {
         strictExportPresence: true,
