@@ -42,6 +42,9 @@ module.exports = class ServerListenerPlugin {
           stats.compilation.compiler.outputFileSystem.readFileSync(serverBuildPath),
         ).toString('utf8');
 
+        // first close previous server
+        await this.serverManager.close();
+
         const server = eval(serverSource);
 
         await this.serverManager.manage(server.default || server);
