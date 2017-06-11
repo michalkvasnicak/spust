@@ -42,7 +42,6 @@ const clientEnvPresets = [
   [
     require.resolve('babel-preset-env'),
     {
-      modules: false,
       targets: {
         ie: 10,
         // We currently minify with uglify
@@ -61,14 +60,13 @@ const serverEnvPresets = [
   [
     require.resolve('babel-preset-env'),
     {
-      modules: false,
       targets: {
         node: 'current',
       },
       // Disable polyfill transforms
       useBuiltIns: false,
-      // Do not transform modules to CJS
-      modules: false,
+      // Do not transform modules to CJS in non test env
+      modules: env === 'test' ? undefined : false,
     },
   ],
 ];
