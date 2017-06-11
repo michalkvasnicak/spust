@@ -80,6 +80,7 @@
     "eslint-plugin-react": "^7.0.1",
     "extract-text-webpack-plugin": "^2.1.0",
     "file-loader": "^0.11.1",
+    "http-proxy-middleware": "^0.17.4",
     "http-shutdown": "^1.2.0",
     "json-loader": "^0.5.4",
     "mz": "^2.6.0",

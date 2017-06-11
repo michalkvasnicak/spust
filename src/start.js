@@ -13,6 +13,7 @@ import errorOverlayMiddleware from 'react-error-overlay/middleware';
 import formatWebpackMessages from 'react-dev-utils/formatWebpackMessages';
 import openBrowser from 'react-dev-utils/openBrowser';
 import Progress from './Progress';
+import proxy from 'http-proxy-middleware';
 import rimraf from 'rimraf';
 import ServerManager from './ServerManager';
 import url from 'url';
@@ -156,17 +157,19 @@ async function start(dir: string, sourceDir: string) {
     hot: true,
     noInfo: true,
     overlay: false,
-    proxy: {
-      '/static': {
-        logLevel: 'silent',
+    proxy: [
+      () => ({
+        context: '/static',
         target: url.format({
           protocol,
           hostname: 'localhost',
           port: webpackPort,
         }),
         pathRewrite: path => path.replace('static', 'client/static'),
-      },
-      '!/sockjs-node/**': {
+      }),
+      () => ({
+        context: pathname =>
+          pathname.indexOf('sockjs-node') === -1 && pathname.indexOf('hot-update.json') === -1,
         target,
         logLevel: 'silent',
         onProxyReq: proxyReq => {
@@ -204,9 +207,9 @@ async function start(dir: string, sourceDir: string) {
         changeOrigin: true,
         ws: true,
         xfwd: true,
-      },
-    },
-    publicPath: '/',
+      }),
+    ],
+    publicPath: config.client.output.publicPath,
     quiet: true,
     setup(app) {
       // This lets us open files from the runtime error overlay.
