@@ -136,6 +136,7 @@ async function configure({ env, serverManager, srcDir, workDir }: Args): Promise
       devtool: isDev ? 'eval' : 'source-map',
       entry: [
         isDev ? require.resolve('source-map-support/register') : null,
+        isDev ? require.resolve('./helpers/serverWrapper') : null,
         require.resolve('./polyfills/server'),
         resolvePath(appDir, './server/index.js'),
       ].filter(Boolean),

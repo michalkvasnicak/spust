@@ -31,31 +31,11 @@ module.exports = class ServerListenerPlugin {
         compiler.options.output.filename,
       );
 
-      // prevent server script from outputting any console info
-      const originalConsoleLog = console.log;
-      // $FlowExpectError
-      console.log = () => {};
+      const serverSource = Buffer.from(
+        stats.compilation.compiler.outputFileSystem.readFileSync(serverBuildPath),
+      ).toString('utf8');
 
-      // start server
-      try {
-        const serverSource = Buffer.from(
-          stats.compilation.compiler.outputFileSystem.readFileSync(serverBuildPath),
-        ).toString('utf8');
-
-        // first close previous server
-        await this.serverManager.close();
-
-        const server = eval(serverSource);
-
-        await this.serverManager.manage(server.default || server);
-      } catch (e) {
-        console.log(e);
-
-        throw e;
-      } finally {
-        // $FlowExpectError
-        console.log = originalConsoleLog;
-      }
+      await this.serverManager.manage(serverSource);
     });
   }
 };

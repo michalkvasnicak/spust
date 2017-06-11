@@ -1,7 +1,5 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`ServerManager throws if port is not provided and the managed server is not listening 1`] = `[Error: Your backend server is not listening.]`;
-
 exports[`ServerManager throws if we are trying to manage not a server instance 1`] = `
 [Error: 
   Server bundle did not export a server listener.

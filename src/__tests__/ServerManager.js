@@ -4,42 +4,37 @@ import { createServer, get } from 'http';
 import ServerManager from '../ServerManager';
 
 describe('ServerManager', () => {
-  let server: ?net$Server;
+  let manager: ?ServerManager;
 
   afterEach(async () => {
-    await new Promise((resolve, reject) => {
-      if (server != null) {
-        server.on('error', reject);
-        server.close(resolve);
-      } else {
-        resolve();
-      }
-    });
+    if (manager) {
+      await manager.close();
+    }
   });
 
   it('throws if we are trying to manage not a server instance', async () => {
-    const manager = new ServerManager();
+    manager = new ServerManager();
 
-    await expect(manager.manage(({}: any))).rejects.toMatchSnapshot();
+    await expect(manager.manage('')).rejects.toMatchSnapshot();
   });
 
-  it('keeps running http server instance if port is not set', async () => {
-    const manager = new ServerManager();
+  it('starts to listen on server if is not listening', async () => {
+    manager = new ServerManager(3334);
 
-    server = await new Promise((resolve, reject) => {
-      const srv = createServer((req, res) => {
+    const code = `
+      require('../helpers/serverWrapper');
+      const http = require('http');
+      const server = http.createServer((req, res) => {
         res.writeHead(200, { 'Content-Type': 'text/plain' });
         res.end('OK');
       });
+      exports = server;
+    `;
 
-      srv.on('error', reject);
-      srv.listen(3333, '127.0.0.1', undefined, () => resolve(srv));
-    });
-
-    await manager.manage(server);
+    await manager.manage(code);
 
     await new Promise((resolve, reject) => {
-      const req = get({ protocol: 'http:', host: '127.0.0.1', port: 3333 }, res => {
+      const req = get({ protocol: 'http:', host: '127.0.0.1', port: 3334 }, res => {
         if (res.statusCode !== 200) {
           return reject(new Error('Response is not OK'));
         }
@@ -53,36 +48,21 @@ describe('ServerManager', () => {
     });
   });
 
-  it('throws if port is not provided and the managed server is not listening', async () => {
-    const manager = new ServerManager();
-
-    server = await new Promise((resolve, reject) => {
-      const srv = createServer((req, res) => {
-        res.writeHead(200, { 'Content-Type': 'text/plain' });
-        res.end('OK');
-      });
-
-      srv.on('error', reject);
-      resolve(srv);
-    });
-
-    await expect(manager.manage(server)).rejects.toMatchSnapshot();
-  });
-
   it('forces managed server to listen on given port', async () => {
-    const manager = new ServerManager(3334);
+    manager = new ServerManager(3334);
 
-    server = await new Promise((resolve, reject) => {
-      const srv = createServer((req, res) => {
+    const code = `
+      require('../helpers/serverWrapper');
+      const http = require('http');
+      const server = http.createServer((req, res) => {
         res.writeHead(200, { 'Content-Type': 'text/plain' });
         res.end('OK');
       });
+      server.listen(3333, '127.0.0.1');
+      exports = server;
+    `;
 
-      srv.on('error', reject);
-      srv.listen(3333, '127.0.0.1', undefined, () => resolve(srv));
-    });
-
-    await manager.manage(server);
+    await manager.manage(code);
 
     await new Promise((resolve, reject) => {
       const req = get({ protocol: 'http:', host: '127.0.0.1', port: 3334 }, res => {
