@@ -89,6 +89,48 @@ export default async function serverReplacer(
 
   try {
     compiledServer = eval(nextServerCode);
+
+    if (compiledServer == null || !((compiledServer.default || compiledServer) instanceof Server)) {
+      throw new Error(
+        `
+  Server bundle did not export a server listener.
+  Server listener must be an instance of net.Server or http.Server.
+  Please export a http listener using export default syntax.
+      `.trim(),
+      );
+    }
+
+    const nextServer: ShutdownableServer = compiledServer.default || compiledServer;
+
+    // wait for nextServer to listen
+    if (nextServer.opening) {
+      // wait until is listening
+      await waitForListen(nextServer);
+
+      // now shutdown server
+      await shutdown(nextServer);
+
+      // now open new server again with our port
+      try {
+        await listen(nextServer, port);
+      } catch (e) {
+        // if it fails, relisten previous server
+        console.log(e);
+
+        if (previousServer != null) {
+          await listen(previousServer, port);
+
+          return previousServer;
+        } else {
+          throw e;
+        }
+      }
+    } else {
+      // server is not opening, so we can easily listen
+      await listen(nextServer, port);
+    }
+
+    return nextServer;
   } catch (e) {
     if (previousServer != null) {
       await listen(previousServer, port);
@@ -101,46 +143,4 @@ export default async function serverReplacer(
     // $FlowExpectError
     console.log = originalConsoleLog;
   }
-
-  if (compiledServer == null || !((compiledServer.default || compiledServer) instanceof Server)) {
-    throw new Error(
-      `
-  Server bundle did not export a server listener.
-  Server listener must be an instance of net.Server or http.Server.
-  Please export a http listener using export default syntax.
-    `,
-    );
-  }
-
-  const nextServer: ShutdownableServer = compiledServer.default || compiledServer;
-
-  // wait for nextServer to listen
-  if (nextServer.opening) {
-    // wait until is listening
-    await waitForListen(nextServer);
-
-    // now shutdown server
-    await shutdown(nextServer);
-
-    // now open new server again with our port
-    try {
-      await listen(nextServer, port);
-    } catch (e) {
-      // if it fails, relisten previous server
-      console.log(e);
-
-      if (previousServer != null) {
-        await listen(previousServer, port);
-
-        return previousServer;
-      } else {
-        throw e;
-      }
-    }
-  } else {
-    // server is not opening, so we can easily listen
-    await listen(nextServer, port);
-  }
-
-  return nextServer;
 }

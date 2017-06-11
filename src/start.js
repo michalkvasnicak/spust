@@ -160,6 +160,7 @@ async function start(dir: string, sourceDir: string) {
     proxy: [
       () => ({
         context: '/static',
+        logLevel: 'silent',
         target: url.format({
           protocol,
           hostname: 'localhost',
