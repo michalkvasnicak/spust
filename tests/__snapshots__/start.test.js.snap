@@ -3,27 +3,7 @@
 exports[`start script works correctly 1`] = `
 "Starting the development server...
 
-Compiled successfully!
-"
+Compiled successfully!"
 `;
 
-exports[`start script works correctly 2`] = `
-"
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-"
-`;
+exports[`start script works correctly 2`] = `""`;

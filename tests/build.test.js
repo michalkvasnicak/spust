@@ -46,8 +46,8 @@ describe('build script', () => {
       proc.on('exit', resolve);
     });
 
-    expect(output.join('')).toMatchSnapshot();
-    expect(errorOutput.join('')).toMatchSnapshot();
+    expect(output.join('').trim()).toMatchSnapshot();
+    expect(errorOutput.join('').trim()).toMatchSnapshot();
     expect(code).toBe(0);
   });
 });
