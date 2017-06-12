@@ -3,7 +3,7 @@
 exports[`build script works correctly 1`] = `
 "Compiled with warnings.
 
-OfflinePlugin: Cache pattern [**/*.css] did not match any assets
+OfflinePlugin: Cache pattern [**/vendor.*.{css,js}] did not match any assets
 Successfully built. See bundle directory.
 "
 `;
