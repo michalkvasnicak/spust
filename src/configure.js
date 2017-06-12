@@ -126,7 +126,7 @@ async function configure({ env, serverManager, srcDir, workDir }: Args): Promise
             hints: 'warning',
           },
       plugins: createWebpackPlugins(
-        { isDev, isServer: false, serverBundlePath, serverManager },
+        { isDev, isServer: false, clientBundlePath, serverBundlePath, serverManager },
         envVariables,
       ),
       target: 'web',
@@ -169,7 +169,7 @@ async function configure({ env, serverManager, srcDir, workDir }: Args): Promise
         __filename: true,
       },
       plugins: createWebpackPlugins(
-        { isDev, isServer: true, serverBundlePath, serverManager },
+        { isDev, isServer: true, clientBundlePath, serverBundlePath, serverManager },
         envVariables,
       ),
       performance: false,

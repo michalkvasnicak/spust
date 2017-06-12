@@ -17,7 +17,13 @@ export default function createWebpackPlugins(
     isServer,
     serverBundlePath,
     serverManager,
-  }: { serverBundlePath: string, isDev: boolean, isServer: boolean, serverManager: ?ServerManager },
+  }: {
+    clientBundlePath: string,
+    serverBundlePath: string,
+    isDev: boolean,
+    isServer: boolean,
+    serverManager: ?ServerManager,
+  },
   envVariables: Object,
 ): Array<any> {
   let serverListenerPlugin;
