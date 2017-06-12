@@ -25,7 +25,7 @@ export default class ServerManager {
     const server = this.server;
 
     if (server) {
-      await new Promise(resolve => server.forceShutdown(resolve));
+      await server.forceShutdown();
 
       this.server = null;
     }

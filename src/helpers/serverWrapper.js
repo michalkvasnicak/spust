@@ -1,57 +1,75 @@
 // @flow
 
 // adds opening property to server, so we can detect if server is trying to bind
-const shutdownable = require('http-shutdown');
 const http = require('http');
 const https = require('https');
-const originalHttpCreateServer = http.createServer;
-const originalHttpsCreateServer = https.createServer;
 
-function wrap(server: net$Server) {
-  const newServer = shutdownable(server);
-  const originalListen = newServer.listen;
-
-  newServer.opening = false;
-
-  // if server is already listening, then just return it
-  if (newServer.address() !== null) {
-    return newServer;
+function wrap(server: Class<net$Server>) {
+  if (server.$$wrapped) {
+    return;
   }
 
-  newServer.listen = (...args) => {
-    newServer.opening = true;
-    return originalListen.apply(newServer, args);
+  const originalListen = server.prototype.listen;
+
+  // $FlowExpectError
+  server.prototype.onConnection = function onConnection(socket) {
+    const socketId = this.socketId++;
+    this.sockets[socketId] = socket;
+
+    socket.once('close', () => {
+      delete this.sockets[socketId];
+    });
   };
 
-  function listening() {
-    newServer.opening = false;
+  // $FlowExpectError
+  server.prototype.isOpening = function isOpening() {
+    return !!this.opening;
+  };
 
-    newServer.removeListener('error', error);
-  }
+  // $FlowExpectError
+  server.prototype.setAsOpening = function setAsOpening() {
+    this.opening = true;
+  };
 
-  function error() {
-    if (newServer.opening) {
-      newServer.opening = false;
-    }
+  // $FlowExpectError
+  server.prototype.setAsNotOpening = function setAsNotOpening() {
+    this.opening = false;
 
-    newServer.removeListener('listening', listening);
-  }
+    this.removeListener('listening', setAsNotOpening);
+    this.removeListener('error', setAsNotOpening);
+  };
 
-  newServer.on('listening', listening);
-  newServer.on('error', error);
+  // $FlowExpectError
+  server.prototype.forceShutdown = async function shutdown() {
+    return new Promise(resolve => {
+      this.removeListener('connection', this.onConnection);
+      this.removeListener('secureConnection', this.onConnection);
 
-  return newServer;
+      Object.keys(this.sockets || {}).forEach(socketId => {
+        this.sockets[socketId].destroy();
+      });
+
+      this.close(resolve);
+    });
+  };
+
+  // $FlowExpectError
+  server.prototype.listen = function listen() {
+    this.setAsOpening();
+    this.sockets = {};
+    this.socketId = 0;
+
+    this.on('connection', this.onConnection);
+    this.on('secureConnection', this.onConnection);
+    this.once('listening', this.setAsNotOpening);
+    this.once('error', this.setAsNotOpening);
+
+    return originalListen.apply(this, arguments);
+  };
+
+  // $FlowExpectError
+  server.$$wrapped = true;
 }
 
-function httpCreateServer(...args) {
-  return wrap(originalHttpCreateServer(...args));
-}
-
-function httpsCreateServer(...args) {
-  return wrap(originalHttpsCreateServer(...args));
-}
-
-if (http.createServer.name !== httpCreateServer.name) {
-  http.createServer = httpCreateServer;
-  https.createServer = httpsCreateServer;
-}
+wrap(http.Server);
+wrap(https.Server);

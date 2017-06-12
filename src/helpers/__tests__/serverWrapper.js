@@ -1,41 +1,25 @@
 // @flow
 
+import type { ShutdownableServer } from '../serverReplacer';
+
 describe('serverWrapper', () => {
-  let server;
+  let server: ?ShutdownableServer;
 
   beforeEach(() => jest.resetModules());
 
-  afterEach(
-    async () =>
-      new Promise(resolve => {
-        if (server) {
-          server.removeAllListeners('connection');
-          server.removeAllListeners('request');
-          server.removeAllListeners('secureConnection');
-          server.removeAllListeners('listening');
-          server.removeAllListeners('error');
-
-          // $FlowExpectError
-          server.forceShutdown(() => {
-            server = null;
-            resolve();
-          });
-        } else {
-          resolve();
-        }
-      }),
-  );
+  afterEach(() => {
+    if (server) {
+      return server.forceShutdown();
+    }
+  });
 
   it('wraps http server', async () => {
     require('../serverWrapper');
     const http = require('http');
 
-    server = http.createServer((req, res) => res.end('ok'));
+    server = (http.createServer((req, res) => res.end('ok')): any);
 
-    expect(server).toHaveProperty('opening');
-    // $FlowExpectError
-    expect(server.opening).toBe(false);
-    // $FlowExpectError
+    expect(server.isOpening()).toBe(false);
     expect(server.listening).toBe(false);
 
     const promise = new Promise(resolve => {
@@ -43,16 +27,12 @@ describe('serverWrapper', () => {
       server.listen(12345, resolve);
     });
 
-    // $FlowExpectError
-    expect(server.opening).toBe(true);
-    // $FlowExpectError
+    expect(server.isOpening()).toBe(true);
     expect(server.listening).toBe(true);
 
     await promise;
 
-    // $FlowExpectError
-    expect(server.opening).toBe(false);
-    // $FlowExpectError
+    expect(server.isOpening()).toBe(false);
     expect(server.listening).toBe(true);
   });
 
@@ -60,12 +40,9 @@ describe('serverWrapper', () => {
     require('../serverWrapper');
     const https = require('https');
 
-    server = https.createServer((req, res) => res.end('ok'));
+    server = (https.createServer((req, res) => res.end('ok')): any);
 
-    expect(server).toHaveProperty('opening');
-    // $FlowExpectError
-    expect(server.opening).toBe(false);
-    // $FlowExpectError
+    expect(server.isOpening()).toBe(false);
     expect(server.listening).toBe(false);
 
     const promise = new Promise(resolve => {
@@ -73,16 +50,12 @@ describe('serverWrapper', () => {
       server.listen(12345, resolve);
     });
 
-    // $FlowExpectError
-    expect(server.opening).toBe(true);
-    // $FlowExpectError
+    expect(server.isOpening()).toBe(true);
     expect(server.listening).toBe(true);
 
     await promise;
 
-    // $FlowExpectError
-    expect(server.opening).toBe(false);
-    // $FlowExpectError
+    expect(server.isOpening()).toBe(false);
     expect(server.listening).toBe(true);
   });
 });

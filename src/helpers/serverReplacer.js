@@ -1,11 +1,11 @@
 // @flow
 
 import { Server } from 'net';
+import { runInNewContext } from 'vm';
 
 export type ShutdownableServer = net$Server & {
-  opening: boolean,
-  forceShutdown(cb: Function): void,
-  shutdown(cb: Function): void,
+  isOpening(): boolean,
+  forceShutdown(): Promise<void>,
 };
 
 async function listen(server: ShutdownableServer, port: number) {
@@ -23,10 +23,6 @@ async function listen(server: ShutdownableServer, port: number) {
     // $FlowExpectError
     server.listen(port, _listen);
   });
-}
-
-async function shutdown(server: ShutdownableServer) {
-  return new Promise(resolve => server.forceShutdown(resolve));
 }
 
 async function waitForListen(server: ShutdownableServer, timeout: number = 5000) {
@@ -78,7 +74,7 @@ export default async function serverReplacer(
 ): Promise<ShutdownableServer> {
   // shutdown previous server
   if (previousServer != null) {
-    await shutdown(previousServer);
+    await previousServer.forceShutdown();
   }
 
   // now instantiate next server
@@ -103,12 +99,12 @@ export default async function serverReplacer(
     const nextServer: ShutdownableServer = compiledServer.default || compiledServer;
 
     // wait for nextServer to listen
-    if (nextServer.opening) {
+    if (nextServer.isOpening()) {
       // wait until is listening
       await waitForListen(nextServer);
 
       // now shutdown server
-      await shutdown(nextServer);
+      await nextServer.forceShutdown();
 
       // now open new server again with our port
       try {
