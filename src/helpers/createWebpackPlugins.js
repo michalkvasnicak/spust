@@ -101,9 +101,7 @@ export default function createWebpackPlugins(
     // offline plugin , only client side assets and prod mode
     !isDev && !isServer
       ? new OfflinePlugin({
-          AppCache: {
-            events: true,
-          },
+          AppCache: false,
           autoUpdate: true,
           caches: {
             main: ['**/*.js', '**/*.css'],
@@ -118,6 +116,8 @@ export default function createWebpackPlugins(
           ServiceWorker: {
             // emit events so we can react to them in client/index.js
             events: true,
+            output: './static/js/sw.js',
+            publicPath: '/static/js/sw.js',
           },
         })
       : null,
