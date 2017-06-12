@@ -104,7 +104,7 @@ export default function createWebpackPlugins(
           AppCache: false,
           autoUpdate: true,
           caches: {
-            main: ['**/*.js', '**/*.css'],
+            main: ['**/vendor.*.{css,js}', '**/main.*.{css,js}'],
             additional: [':rest:'],
             // main: ['**/vendor-*.{css,js}', '**/main-*.{css,js}'],
             // additional: ['**/*.{css,js,jpg,jpeg,png,ogg,svg,woff,woff2,ttf}'],
