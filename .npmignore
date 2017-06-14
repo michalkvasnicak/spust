@@ -1,6 +1,6 @@
 node_modules
 **/__fixtures__/**/bundle/*
-**/__tests__/.*
+**/__tests__/**
 **/*.test.js
 bundle
 fixtures
