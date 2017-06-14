@@ -37,7 +37,7 @@
   },
   "scripts": {
     "prebuild": "rimraf scripts/*",
-    "build:lib": "babel src --out-dir scripts",
+    "build:lib": "babel src --ignore \"**/__tests__/*.js\" --out-dir scripts",
     "build:flow": "flow-copy-source -v -i \"**/__tests__/*.js\" src scripts",
     "build": "npm run build:lib && npm run build:flow",
     "prebuild:watch": "rimraf scripts/*",
