@@ -4,7 +4,8 @@ import { readFileSync } from 'fs';
 
 // this file expose helpers that you can use in your project
 export function assets(): { css: Array<string>, js: Array<string> } {
-  const assetsJsonPath: string = process.env.ASSETS_JSON_PATH || '';
+  // see helpers/providerVariables.js and configure.js server section's entry point
+  const assetsJsonPath: string = process.env.__ASSETS_JSON_PATH || '';
   const loadedAssets: {
     [key: string]: { [key: 'css' | 'js']: string | Array<string> },
   } = JSON.parse(readFileSync(assetsJsonPath, { encoding: 'utf8' }));
