@@ -1,13 +1,13 @@
 {
   "name": "spust",
-  "version": "0.5.7",
+  "version": "0.6.0",
   "description": "Quickly bootstrap universal javascript applications.",
   "keywords": [
     "webpack",
     "universal",
     "bundler"
   ],
-  "main": "index.js",
+  "main": "scripts/index.js",
   "repository": "https://github.com/michalkvasnicak/spust",
   "author": "Michal Kvasničák",
   "license": "MIT",
