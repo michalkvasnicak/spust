@@ -2,8 +2,45 @@
 
 const env = process.env.BABEL_ENV || process.env.NODE_ENV;
 
+let supportReactLoadable = false;
+
+// detect if we have react-loadable, babel-plugin-import-inspector and import-inspector
+// if one of them is missing, throw an error, if all of them are missing, user doesn't want
+// to use it
+let reactLoadableAvailable = false;
+let importInspectorAvailable = false;
+let babelImportInspectorAvailable = false;
+
+try {
+  require.resolve('react-loadable');
+  reactLoadableAvailable = true;
+  require.resolve('babel-plugin-import-inspector');
+  babelImportInspectorAvailable = true;
+  require.resolve('import-inspector');
+  importInspectorAvailable = true;
+  supportReactLoadable = true;
+} catch (e) {
+  // do not throw if all of them are missing
+  if (reactLoadableAvailable || importInspectorAvailable || babelImportInspectorAvailable) {
+    throw new Error(
+      `
+  Please install react-loadable, babel-plugin-import-inspector and import-inspector.
+  You have to provide all of these dependencies in order to make it work correctly.
+    `,
+    );
+  }
+}
+
 const plugins = [
-  [require.resolve('react-loadable/babel'), { webpack: true, babel: true }],
+  supportReactLoadable
+    ? [
+        require.resolve('babel-plugin-import-inspector'),
+        {
+          serverSideRequirePath: true,
+          webpackRequireWeakId: true,
+        },
+      ]
+    : null,
   require.resolve('babel-plugin-transform-class-properties'),
   [
     require.resolve('babel-plugin-transform-object-rest-spread'),
@@ -27,7 +64,7 @@ const plugins = [
   ],
   require.resolve('babel-plugin-idx'),
   require.resolve('babel-plugin-syntax-dynamic-import'),
-];
+].filter(Boolean);
 
 if (env === 'development' || env === 'test') {
   const devPlugins = [
