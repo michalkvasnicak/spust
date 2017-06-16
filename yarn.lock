@@ -2792,6 +2792,10 @@ ignore@^3.2.0:
   version "3.3.3"
   resolved "https://registry.yarnpkg.com/ignore/-/ignore-3.3.3.tgz#432352e57accd87ab3110e82d3fea0e47812156d"
 
+import-inspector@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/import-inspector/-/import-inspector-2.0.0.tgz#ce75fdb6a277d2800effe097e2295bc8690b2923"
+
 imurmurhash@^0.1.4:
   version "0.1.4"
   resolved "https://registry.yarnpkg.com/imurmurhash/-/imurmurhash-0.1.4.tgz#9218b9b2b928a238b13dc4fb6b6d576f231453ea"
@@ -3063,6 +3067,10 @@ is-typedarray@~1.0.0:
 is-utf8@^0.2.0:
   version "0.2.1"
   resolved "https://registry.yarnpkg.com/is-utf8/-/is-utf8-0.2.1.tgz#4b0da1442104d1b336340e80797e865cf39f7d72"
+
+is-webpack-bundle@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/is-webpack-bundle/-/is-webpack-bundle-1.0.0.tgz#576a50bb7c53d1d6a5c1647939c93ae2cbb90eea"
 
 is-wsl@^1.1.0:
   version "1.1.0"
@@ -5131,11 +5139,13 @@ react-error-overlay@^1.0.7:
     settle-promise "1.0.0"
     source-map "0.5.6"
 
-react-loadable@^3.3.1:
-  version "3.3.1"
-  resolved "https://registry.yarnpkg.com/react-loadable/-/react-loadable-3.3.1.tgz#91310f1c2adcc73ce944380ee9529f5d33e100d3"
+react-loadable@^4.0.1:
+  version "4.0.1"
+  resolved "https://registry.yarnpkg.com/react-loadable/-/react-loadable-4.0.1.tgz#fc68b2fea88882bbda380d83a26e19a027e3899a"
   dependencies:
-    babel-plugin-syntax-dynamic-import "^6.18.0"
+    import-inspector "^2.0.0"
+    is-webpack-bundle "^1.0.0"
+    webpack-require-weak "^1.0.0"
 
 read-cache@^1.0.0:
   version "1.0.0"
@@ -6178,6 +6188,12 @@ webpack-dev-server@^2.4.5:
 webpack-node-externals@^1.6.0:
   version "1.6.0"
   resolved "https://registry.yarnpkg.com/webpack-node-externals/-/webpack-node-externals-1.6.0.tgz#232c62ec6092b100635a3d29d83c1747128df9bd"
+
+webpack-require-weak@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/webpack-require-weak/-/webpack-require-weak-1.0.0.tgz#6d79b31f04a65d5897d015bfc952e30c07b1c5b6"
+  dependencies:
+    is-webpack-bundle "^1.0.0"
 
 webpack-sources@^0.1.0:
   version "0.1.5"
