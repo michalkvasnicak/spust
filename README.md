@@ -74,3 +74,7 @@ spust start
 ```
 
 Will start the webpack dev server and your backend server.
+
+# react-loadable 4.0 support
+
+In order to use [react-loadable](https://github.com/thejameskyle/react-loadable) you have to install `react-loadable, import-inspector and babel-plugin-import-inspector`. Babel plugin will be used automatically.
