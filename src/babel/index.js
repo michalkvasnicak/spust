@@ -67,6 +67,12 @@ const plugins = [
         },
       ]
     : null,
+  supportStyledComponents
+    ? [
+        require.resolve('babel-plugin-styled-components'),
+        { displayName: env === 'test' || env === 'development' },
+      ]
+    : null,
   require.resolve('babel-plugin-transform-class-properties'),
   [
     require.resolve('babel-plugin-transform-object-rest-spread'),
@@ -134,24 +140,7 @@ const serverEnvPresets = [
   ],
 ];
 
-const clientPlugins = [
-  supportStyledComponents
-    ? [
-        require.resolve('babel-plugin-styled-components'),
-        { displayName: env === 'test' || env === 'development' },
-      ]
-    : null,
-].filter(Boolean);
-
-const serverPlugins = [
-  require.resolve('babel-plugin-dynamic-import-node'),
-  supportStyledComponents
-    ? [
-        require.resolve('babel-plugin-styled-components'),
-        { displayName: env === 'test' || env === 'development', ssr: true },
-      ]
-    : null,
-].filter(Boolean);
+const serverPlugins = [require.resolve('babel-plugin-dynamic-import-node')];
 
 module.exports = {
   env: {
@@ -159,7 +148,6 @@ module.exports = {
       presets: [require.resolve('babel-preset-react'), ...clientEnvPresets],
       plugins: [
         ...plugins,
-        ...clientPlugins,
         [require.resolve('babel-plugin-transform-regenerator'), { async: false }],
       ],
     },
