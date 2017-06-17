@@ -3,6 +3,7 @@
 const env = process.env.BABEL_ENV || process.env.NODE_ENV;
 
 let supportReactLoadable = false;
+let supportStyledComponents = false;
 
 // detect if we have react-loadable, babel-plugin-import-inspector and import-inspector
 // if one of them is missing, throw an error, if all of them are missing, user doesn't want
@@ -10,6 +11,11 @@ let supportReactLoadable = false;
 let reactLoadableAvailable = false;
 let importInspectorAvailable = false;
 let babelImportInspectorAvailable = false;
+
+// detect if we have styled-components and babel-plugin-styled-components
+// if one of them is missing, throw an error
+let styledComponentsAvailable = false;
+let babelStyledComponentsAvailable = false;
 
 try {
   require.resolve('react-loadable');
@@ -29,6 +35,23 @@ try {
       `
   Please install react-loadable, babel-plugin-import-inspector and import-inspector.
   You have to provide all of these dependencies in order to make it work correctly.
+    `,
+    );
+  }
+}
+
+try {
+  require.resolve('styled-components');
+  styledComponentsAvailable = true;
+  require.resolve('babel-plugin-styled-components');
+  babelStyledComponentsAvailable = true;
+  supportStyledComponents = true;
+} catch (e) {
+  if (!supportStyledComponents && (styledComponentsAvailable || babelStyledComponentsAvailable)) {
+    throw new Error(
+      `
+  Please install styled-components and babel-plugin-styled-components.
+  You have to provide both in order to support styled-components v2.
     `,
     );
   }
@@ -111,7 +134,24 @@ const serverEnvPresets = [
   ],
 ];
 
-const serverPlugins = [require.resolve('babel-plugin-dynamic-import-node')];
+const clientPlugins = [
+  supportStyledComponents
+    ? [
+        require.resolve('babel-plugin-styled-components'),
+        { displayName: env === 'test' || env === 'development' },
+      ]
+    : null,
+].filter(Boolean);
+
+const serverPlugins = [
+  require.resolve('babel-plugin-dynamic-import-node'),
+  supportStyledComponents
+    ? [
+        require.resolve('babel-plugin-styled-components'),
+        { displayName: env === 'test' || env === 'development', ssr: true },
+      ]
+    : null,
+].filter(Boolean);
 
 module.exports = {
   env: {
@@ -119,6 +159,7 @@ module.exports = {
       presets: [require.resolve('babel-preset-react'), ...clientEnvPresets],
       plugins: [
         ...plugins,
+        ...clientPlugins,
         [require.resolve('babel-plugin-transform-regenerator'), { async: false }],
       ],
     },
