@@ -76,7 +76,7 @@ yarn spust test
 Build an application for production.
 
 ```sh
-spust build
+yarn spust build
 ```
 
 Will build project with `src` directory. Make sure you have `src/server/index.js` and `src/client/index.js` files.
@@ -86,7 +86,7 @@ Will build project with `src` directory. Make sure you have `src/server/index.js
 Starts the development server and automatically opens browser so you can develop right away.
 
 ```sh
-spust start
+yarn spust start
 ```
 
 Will start the webpack dev server and your backend server.
