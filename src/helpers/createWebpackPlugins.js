@@ -1,6 +1,7 @@
 // @flow
 
 import AssetsPlugin from 'assets-webpack-plugin';
+import BabiliPlugin from 'babili-webpack-plugin';
 import CaseSensitivePathsPlugin from 'case-sensitive-paths-webpack-plugin';
 import CompressionPlugin from 'compression-webpack-plugin';
 import ExtractTextPlugin from 'extract-text-webpack-plugin';
@@ -17,12 +18,14 @@ export default function createWebpackPlugins(
     isServer,
     serverBundlePath,
     serverManager,
+    useBabili,
   }: {
     clientBundlePath: string,
     serverBundlePath: string,
     isDev: boolean,
     isServer: boolean,
     serverManager: ?ServerManager,
+    useBabili: boolean,
   },
   envVariables: Object,
 ): Array<any> {
@@ -66,7 +69,7 @@ export default function createWebpackPlugins(
       : null,
 
     // uglify js, only client side and prod mode
-    !isDev && !isServer
+    !isDev && !isServer && !useBabili
       ? new webpack.optimize.UglifyJsPlugin({
           compress: {
             warnings: false,
@@ -77,6 +80,18 @@ export default function createWebpackPlugins(
           },
           sourceMap: true,
         })
+      : null,
+
+    // babili, only client side and prod mode
+    !isDev && !isServer && useBabili
+      ? new BabiliPlugin(
+          {},
+          {
+            babel: require('babel-core'),
+            babili: require.resolve('babel-preset-babili'),
+            comments: false,
+          },
+        )
       : null,
 
     // ignore locales imported by momentjs, both sides, requires you to require them explicitly

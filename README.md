@@ -13,6 +13,7 @@
 * [Build](#build)
 * [Local development](#local-development)
 * [Customizing configuration](#customizing-configuration)
+* [Use babili for the client side minification](#use-babili-for-the-client-side-minification)
 * [react-loadable v4 support](#react-loadable-v4-support)
 * [styled-components v2 support](#styled-components-v2-support)
 
@@ -94,8 +95,13 @@ const webpack = require('webpack');
 
 type Settings = {
   env: 'production' | 'development',
+  // server manager field is available only in local dev mode
+  // and can be null or instance of ServerManager
+  // see src/ServerManager for a whole type
+  serverManager?: ?ServerManager,
   srcDir: string,
   workDir: string,
+  useBabili: boolean,
 }
 
 type Configuration = {
@@ -116,6 +122,12 @@ module.exports = (configuration: Configuration, settings: Settings): Configurati
   return configuration;
 }
 ```
+
+# Use babili for the client side minification
+
+If you want to minify client side bundle using [babili](https://github.com/babel/babili) instead of [uglifyjs](https://github.com/mishoo/UglifyJS) *(because uglifyjs doesn't support es6 features)* you can enable it using `SPUST_USE_BABILI=1` env variable, for instance `SPUST_USE_BABILI=1 yarn spust build`.
+
+This will change settings of `babel-preset-env` to support all [browsers with coverage > 2%](http://browserl.ist/?q=%3E+2%25).
 
 # react-loadable v4 support
 

@@ -55,10 +55,17 @@ type Args = {
   env: 'development' | 'production',
   serverManager?: ?ServerManager,
   srcDir: string,
+  useBabili: boolean,
   workDir: string,
 };
 
-async function configure({ env, serverManager, srcDir, workDir }: Args): Promise<Configuration> {
+async function configure({
+  env,
+  serverManager,
+  srcDir,
+  useBabili,
+  workDir,
+}: Args): Promise<Configuration> {
   const isDev = env === 'development';
   const appDir = resolvePath(workDir, srcDir);
   const clientBundlePath = resolvePath(workDir, './bundle/client');
@@ -113,7 +120,7 @@ async function configure({ env, serverManager, srcDir, workDir }: Args): Promise
       },
       module: {
         strictExportPresence: true,
-        rules: createWebpackLoaders({ appDir, isDev, isServer: false }, envVariables),
+        rules: createWebpackLoaders({ appDir, isDev, isServer: false, useBabili }, envVariables),
       },
       node: {
         fs: 'empty',
@@ -126,7 +133,7 @@ async function configure({ env, serverManager, srcDir, workDir }: Args): Promise
             hints: 'warning',
           },
       plugins: createWebpackPlugins(
-        { isDev, isServer: false, clientBundlePath, serverBundlePath, serverManager },
+        { isDev, isServer: false, clientBundlePath, serverBundlePath, serverManager, useBabili },
         envVariables,
       ),
       target: 'web',
@@ -163,14 +170,14 @@ async function configure({ env, serverManager, srcDir, workDir }: Args): Promise
       },
       module: {
         strictExportPresence: true,
-        rules: createWebpackLoaders({ appDir, isDev, isServer: true }, envVariables),
+        rules: createWebpackLoaders({ appDir, isDev, isServer: true, useBabili }, envVariables),
       },
       node: {
         __dirname: true,
         __filename: true,
       },
       plugins: createWebpackPlugins(
-        { isDev, isServer: true, clientBundlePath, serverBundlePath, serverManager },
+        { isDev, isServer: true, clientBundlePath, serverBundlePath, serverManager, useBabili },
         envVariables,
       ),
       performance: false,

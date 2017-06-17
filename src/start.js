@@ -37,6 +37,7 @@ if (workDir == null) {
 }
 
 async function start(dir: string, sourceDir: string) {
+  const useBabili = !!parseInt(process.env.SPUST_USE_BABILI || '0', 10);
   const DEFAULT_PORT = parseInt(process.env.WEBPACK_PORT) || 2999;
   const DEFAULT_SERVER_PORT = parseInt(process.env.PORT, 10) || 3000;
   const HOST = process.env.HOST || 'localhost';
@@ -56,6 +57,7 @@ async function start(dir: string, sourceDir: string) {
     srcDir: sourceDir,
     env: 'development',
     serverManager,
+    useBabili,
   });
 
   // override configuration using own configure
