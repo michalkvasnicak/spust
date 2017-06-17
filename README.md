@@ -75,6 +75,39 @@ spust start
 
 Will start the webpack dev server and your backend server.
 
+## Change configuration of spust
+
+You can provide your own `spust.config.js` which exports a function receiving webpack configuration and settings.
+
+```js
+// example, add node_modules to vendor entry
+const webpack = require('webpack');
+
+type Settings = {
+  env: 'production' | 'development',
+  srcDir: string,
+  workDir: string,
+}
+
+type Configuration = {
+  client: WebpackConfig,
+  server: WebpackConfig,
+}
+
+module.exports = (configuration: Configuration, settings: Settings): Configuration => {
+  configuration.client.loaders.push(
+    new webpack.optimize.CommonsChunkPlugin({
+      name: 'vendor',
+      minChunks: module =>
+        module.resource &&
+        module.resource.indexOf('node_modules') !== -1,
+    })
+  );
+
+  return configuration;
+}
+```
+
 # react-loadable 4.0 support
 
 In order to use [react-loadable](https://github.com/thejameskyle/react-loadable) you have to install `react-loadable, import-inspector and babel-plugin-import-inspector`. Babel plugin will be used automatically.
