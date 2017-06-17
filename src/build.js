@@ -30,7 +30,8 @@ if (workDir == null) {
 }
 
 async function build(dir: string, sourceDir: string) {
-  let config = await configure({ workDir: dir, srcDir: sourceDir, env: 'production' });
+  const useBabili = !!parseInt(process.env.SPUST_USE_BABILI || '0', 10);
+  let config = await configure({ workDir: dir, srcDir: sourceDir, env: 'production', useBabili });
 
   // override configuration using own configure
   const configPath = resolvePath(workDir, './spust.config.js');

@@ -1,6 +1,7 @@
 'use strict';
 
 const env = process.env.BABEL_ENV || process.env.NODE_ENV;
+const useBabili = !!parseInt(process.env.SPUST_USE_BABILI || '0', 10);
 
 let supportReactLoadable = false;
 let supportStyledComponents = false;
@@ -112,10 +113,15 @@ const clientEnvPresets = [
     require.resolve('babel-preset-env'),
     {
       targets: {
-        ie: 10,
-        // We currently minify with uglify
-        // Remove after https://github.com/mishoo/UglifyJS2/issues/448
-        uglify: true,
+        ...(useBabili ? { browsers: '> 2%' } : {}),
+        ...(!useBabili
+          ? {
+              ie: 10,
+              // We currently minify with uglify
+              // Remove after https://github.com/mishoo/UglifyJS2/issues/448
+              uglify: true,
+            }
+          : {}),
       },
       // Disable polyfill transforms
       useBuiltIns: false,
