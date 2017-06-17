@@ -21,7 +21,10 @@ try {
   supportReactLoadable = true;
 } catch (e) {
   // do not throw if all of them are missing
-  if (reactLoadableAvailable || importInspectorAvailable || babelImportInspectorAvailable) {
+  if (
+    !supportReactLoadable &&
+    (reactLoadableAvailable || importInspectorAvailable || babelImportInspectorAvailable)
+  ) {
     throw new Error(
       `
   Please install react-loadable, babel-plugin-import-inspector and import-inspector.
