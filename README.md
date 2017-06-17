@@ -5,7 +5,7 @@
 
 > Quickly bootstrap universal javascript application.
 
-**Under the development, feel free to report bugs, open PRs, etc...**
+**Under the development, API can change, feel free to report bugs, open PRs, etc...**
 
 ## Installation
 
