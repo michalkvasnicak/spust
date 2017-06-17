@@ -12,6 +12,7 @@
 * [Usage](#usage)
 * [Build](#build)
 * [Local development](#local-development)
+* [Test](#test)
 * [Customizing configuration](#customizing-configuration)
 * [Use babili for the client side minification](#use-babili-for-the-client-side-minification)
 * [react-loadable v4 support](#react-loadable-v4-support)
@@ -65,6 +66,11 @@ yarn spust build
 yarn spust start
 ```
 
+```sh
+# starts jest in watch mode unless is called with --coverage or process.env.CI is set
+yarn spust test
+```
+
 ## Build
 
 Build an application for production.
@@ -84,6 +90,14 @@ spust start
 ```
 
 Will start the webpack dev server and your backend server.
+
+## Test
+
+```sh
+yarn spust test
+```
+
+Runs tests in interactive mode. See [create-react-app documentation](https://github.com/facebookincubator/create-react-app/blob/master/packages/react-scripts/template/README.md#running-tests) for this as this is the same.
 
 ## Customizing configuration
 
