@@ -3,6 +3,7 @@
 const env = process.env.BABEL_ENV || process.env.NODE_ENV;
 
 let supportReactLoadable = false;
+let supportStyledComponents = false;
 
 // detect if we have react-loadable, babel-plugin-import-inspector and import-inspector
 // if one of them is missing, throw an error, if all of them are missing, user doesn't want
@@ -10,6 +11,11 @@ let supportReactLoadable = false;
 let reactLoadableAvailable = false;
 let importInspectorAvailable = false;
 let babelImportInspectorAvailable = false;
+
+// detect if we have styled-components and babel-plugin-styled-components
+// if one of them is missing, throw an error
+let styledComponentsAvailable = false;
+let babelStyledComponentsAvailable = false;
 
 try {
   require.resolve('react-loadable');
@@ -34,6 +40,23 @@ try {
   }
 }
 
+try {
+  require.resolve('styled-components');
+  styledComponentsAvailable = true;
+  require.resolve('babel-plugin-styled-components');
+  babelStyledComponentsAvailable = true;
+  supportStyledComponents = true;
+} catch (e) {
+  if (!supportStyledComponents && (styledComponentsAvailable || babelStyledComponentsAvailable)) {
+    throw new Error(
+      `
+  Please install styled-components and babel-plugin-styled-components.
+  You have to provide both in order to support styled-components v2.
+    `,
+    );
+  }
+}
+
 const plugins = [
   supportReactLoadable
     ? [
@@ -42,6 +65,12 @@ const plugins = [
           serverSideRequirePath: true,
           webpackRequireWeakId: true,
         },
+      ]
+    : null,
+  supportStyledComponents
+    ? [
+        require.resolve('babel-plugin-styled-components'),
+        { displayName: env === 'test' || env === 'development' },
       ]
     : null,
   require.resolve('babel-plugin-transform-class-properties'),
