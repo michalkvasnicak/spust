@@ -1,6 +1,6 @@
 {
   "name": "spust",
-  "version": "0.10.0-1",
+  "version": "0.10.0",
   "description": "Quickly bootstrap universal javascript applications.",
   "keywords": [
     "webpack",
