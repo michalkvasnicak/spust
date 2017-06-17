@@ -7,22 +7,19 @@
 
 **Under the development, API can change, feel free to report bugs, open PRs, etc...**
 
+* [Installation](#installation)
+* [Requirements](#requirements)
+* [Usage](#usage)
+* [Build](#build)
+* [Local development](#local-development)
+* [Customizing configuration](#customizing-configuration)
+* [react-loadable v4 support](#react-loadable-v4-support)
+* [styled-components v2 support](#styled-components-v2-support)
+
 ## Installation
 
 ```sh
 yarn add spust
-```
-
-## Usage
-
-```sh
-# builds bundle for production environment
-yarn spust build
-```
-
-```sh
-# starts webpack dev server and your backend server and opens browser automatically
-yarn spust start
 ```
 
 ## Requirements
@@ -55,6 +52,18 @@ server.listen(process.env.PORT);
 export default server;
 ```
 
+## Usage
+
+```sh
+# builds bundle for production environment
+yarn spust build
+```
+
+```sh
+# starts webpack dev server and your backend server and opens browser automatically
+yarn spust start
+```
+
 ## Build
 
 Build an application for production.
@@ -65,7 +74,7 @@ spust build
 
 Will build project with `src` directory. Make sure you have `src/server/index.js` and `src/client/index.js` files.
 
-## Development
+## Local development
 
 Starts the development server and automatically opens browser so you can develop right away.
 
@@ -75,7 +84,7 @@ spust start
 
 Will start the webpack dev server and your backend server.
 
-## Change configuration of spust
+## Customizing configuration
 
 You can provide your own `spust.config.js` which exports a function receiving webpack configuration and settings.
 
@@ -108,6 +117,10 @@ module.exports = (configuration: Configuration, settings: Settings): Configurati
 }
 ```
 
-# react-loadable 4.0 support
+# react-loadable v4 support
 
 In order to use [react-loadable](https://github.com/thejameskyle/react-loadable) you have to install `react-loadable, import-inspector and babel-plugin-import-inspector`. Babel plugin will be used automatically.
+
+# styled-components v2 support
+
+In order to use [styled-components v2](https://www.styled-components.com/docs) you have to install `styled-components` and `babel-plugin-styled-components`. Babel plugin will be used automatically. Then just follow documentation on [styled-components server side rendering](https://www.styled-components.com/docs/advanced#server-side-rendering).
