@@ -84,7 +84,12 @@ const commandHandlers /*: CommandHandlers */ = {
       [workDir, srcDir].filter(Boolean)
     );
   },
-  test: () => {},
+  test: () => {
+    return startProcess(
+      resolve(__dirname, '../scripts/test.js'),
+      process.argv.slice(2)
+    );
+  },
   version: () => {
     console.log(`spust v${pkg.version}`);
     process.exit(0);
