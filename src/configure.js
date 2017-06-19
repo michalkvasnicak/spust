@@ -74,7 +74,9 @@ async function configure({
   const variables = {
     // provide full path to webpack-assets.json so you can easily load it server side
     ASSETS_JSON_PATH: resolvePath(serverBundlePath, 'webpack-assets.json'),
-    ASSETS_PATH: resolvePath(clientBundlePath, './static'),
+    ASSETS_PATH: clientBundlePath,
+    CLIENT_BUNDLE_PATH: clientBundlePath,
+    SERVER_BUNDLE_PATH: serverBundlePath,
     NODE_ENV: env,
     // this is set in build.js or start.js, you can override it using env variables
     // but we will force this PORT during development to ensure
