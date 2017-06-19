@@ -17,6 +17,7 @@
 * [Use babili for the client side minification](#use-babili-for-the-client-side-minification)
 * [react-loadable v4 support](#react-loadable-v4-support)
 * [styled-components v2 support](#styled-components-v2-support)
+* [Examples](#examples)
 
 ## Installation
 
@@ -150,3 +151,7 @@ In order to use [react-loadable](https://github.com/thejameskyle/react-loadable)
 # styled-components v2 support
 
 In order to use [styled-components v2](https://www.styled-components.com/docs) you have to install `styled-components` and `babel-plugin-styled-components`. Babel plugin will be used automatically. Then just follow documentation on [styled-components server side rendering](https://www.styled-components.com/docs/advanced#server-side-rendering).
+
+# Examples
+
+* [Micro + React Router v4](https://github.com/michalkvasnicak/spust-examples)
