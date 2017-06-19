@@ -6,11 +6,17 @@ import CaseSensitivePathsPlugin from 'case-sensitive-paths-webpack-plugin';
 import CompressionPlugin from 'compression-webpack-plugin';
 import ExtractTextPlugin from 'extract-text-webpack-plugin';
 import chalk from 'chalk';
-import OfflinePlugin from 'offline-plugin';
 import ServerManager from '../ServerManager';
 import ServerListenerPlugin from '../ServerListenerPlugin';
 import WatchMissingNodeModulesPlugin from 'react-dev-utils/WatchMissingNodeModulesPlugin';
 import webpack from 'webpack';
+
+// detect offline plugin
+let OfflinePlugin;
+
+try {
+  OfflinePlugin = require('offline-plugin');
+} catch (e) {}
 
 export default function createWebpackPlugins(
   {
@@ -114,7 +120,7 @@ export default function createWebpackPlugins(
       : null,
 
     // offline plugin , only client side assets and prod mode
-    !isDev && !isServer
+    !isDev && !isServer && OfflinePlugin != null
       ? new OfflinePlugin({
           AppCache: false,
           autoUpdate: true,
