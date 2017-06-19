@@ -14,6 +14,7 @@
 * [Local development](#local-development)
 * [Test](#test)
 * [Customizing configuration](#customizing-configuration)
+* [Service worker and offline support](#service-worker-and-offline-support)
 * [Use babili for the client side minification](#use-babili-for-the-client-side-minification)
 * [react-loadable v4 support](#react-loadable-v4-support)
 * [styled-components v2 support](#styled-components-v2-support)
@@ -137,6 +138,14 @@ module.exports = (configuration: Configuration, settings: Settings): Configurati
   return configuration;
 }
 ```
+
+# Service worker and offline support
+
+Spust supports service workers using [offline-plugin for webpack](https://github.com/NekR/offline-plugin).
+
+It is preconfigured just install it because it is `peerDependency`. In order to use it please install `offline-plugin` package in your project and then add the line `require('offline-plugin/runtime').install();` to the beginning of your `src/client/index.js` file.
+
+For more information see [offline-plugin's setup section](https://github.com/NekR/offline-plugin#setup).
 
 # Use babili for the client side minification
 
