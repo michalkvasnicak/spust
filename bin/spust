@@ -76,7 +76,7 @@ const commandHandlers /*: CommandHandlers */ = {
 
     const statsArgument = args.has('--stats');
     // find first argument not starting with --
-    const srcDir = process.argv.slice(3).find(arg => !arg.startsWith('__'));
+    const srcDir = process.argv.slice(3).find(arg => !arg.startsWith('--'));
 
     return startProcess(
       resolve(__dirname, '../scripts/build.js'),
@@ -110,7 +110,7 @@ const commandHandlers /*: CommandHandlers */ = {
     }
 
     // find first argument not starting with --
-    const srcDir = process.argv.slice(3).find(arg => !arg.startsWith('__'));
+    const srcDir = process.argv.slice(3).find(arg => !arg.startsWith('--'));
 
     return startProcess(
       resolve(__dirname, '../scripts/start.js'),
