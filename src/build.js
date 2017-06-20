@@ -22,7 +22,7 @@ process.on('unhandledRejection', err => {
 
 // $FlowExpectError
 const isInteractive = process.stdout.isTTY;
-const srcDir = process.argv[3] || 'src';
+const srcDir = process.argv.slice(3).find(arg => !arg.startsWith('--')) || 'src';
 const workDir: ?string = process.argv[2];
 const args = new Set(process.argv);
 const outputStats = args.has('--stats');
