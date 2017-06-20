@@ -5,7 +5,7 @@ process.env.BABEL_ENV = 'production';
 process.env.NODE_ENV = 'production';
 
 import { resolve as resolvePath } from 'path';
-import { stat } from 'mz/fs';
+import { writeFile, stat } from 'mz/fs';
 import clearConsole from 'react-dev-utils/clearConsole';
 import formatWebpackMessages from 'react-dev-utils/formatWebpackMessages';
 import chalk from 'chalk';
@@ -24,12 +24,14 @@ process.on('unhandledRejection', err => {
 const isInteractive = process.stdout.isTTY;
 const srcDir = process.argv[3] || 'src';
 const workDir: ?string = process.argv[2];
+const args = new Set(process.argv);
+const outputStats = args.has('--stats');
 
 if (workDir == null) {
   throw new Error('Please provide workDir path as the first argument');
 }
 
-async function build(dir: string, sourceDir: string) {
+async function build(dir: string, sourceDir: string, { outputStats }: { outputStats: boolean }) {
   const useBabili = !!parseInt(process.env.SPUST_USE_BABILI || '0', 10);
   let config = await configure({ workDir: dir, srcDir: sourceDir, env: 'production', useBabili });
 
@@ -65,7 +67,7 @@ async function build(dir: string, sourceDir: string) {
     const progress = new Progress(compiler.compilers);
     progress.start();
 
-    compiler.run((err, stats) => {
+    compiler.run(async (err, stats) => {
       progress.stop();
 
       if (isInteractive) {
@@ -92,6 +94,31 @@ async function build(dir: string, sourceDir: string) {
       if (clientMessages.warnings.length || serverMessages.warnings.length) {
         console.log(chalk.yellow('Compiled with warnings.\n'));
         console.log([...clientMessages.warnings, ...serverMessages.warnings].join('\n\n'));
+      } else {
+        console.log(chalk.green('Successfully built. See bundle directory.'));
+      }
+
+      // write stats.json if is enabled
+      if (outputStats) {
+        const clientStatsFile = resolvePath(dir, 'client.stats.json');
+        const serverStatsFile = resolvePath(dir, 'server.stats.json');
+
+        await Promise.all([
+          writeFile(clientStatsFile, JSON.stringify(clientStats.toJson('verbose'), null, 2)),
+          writeFile(serverStatsFile, JSON.stringify(serverStats.toJson('verbose'), null, 2)),
+        ]);
+
+        console.log(
+          chalk.cyan('\nYou can analyze your webpack bundles. See following json files:\n'),
+        );
+        console.log(` client bundle stats: ${clientStatsFile}`);
+        console.log(` server bundle stats: ${serverStatsFile}`);
+        console.log();
+        console.log(
+          chalk.cyan(
+            'Visit https://webpack.github.io/analyse/ and use one of the files mentioned above.',
+          ),
+        );
       }
 
       resolve();
@@ -99,10 +126,8 @@ async function build(dir: string, sourceDir: string) {
   });
 }
 
-build(workDir, srcDir)
+build(workDir, srcDir, { outputStats })
   .then(() => {
-    console.log(chalk.green('Successfully built. See bundle directory.'));
-
     process.exit(0);
   })
   .catch(e => {

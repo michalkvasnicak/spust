@@ -58,33 +58,79 @@ function startProcess(bin /*: string*/, args /*: Array<string>*/) /*: ChildProce
 
 const commandHandlers /*: CommandHandlers */ = {
   build: ({ workDir }) => {
-    const srcDir = process.argv[3];
+    const args = new Set(process.argv);
+
+    if (args.has('help') || args.has('--help')) {
+      console.log(`
+  Builds an application for a production. It creates the bundle directory.
+
+  Usage
+    $ spust build [sourceDirectory] [--stats]
+
+  Available modifiers:
+    --stats
+      outputs client.stats.json and server.stats.json to the current working directory so you can analyze your bundle
+      `);
+      process.exit(0);
+    }
+
+    const statsArgument = args.has('--stats');
+    // find first argument not starting with --
+    const srcDir = process.argv.slice(3).find(arg => !arg.startsWith('__'));
+
     return startProcess(
       resolve(__dirname, '../scripts/build.js'),
-      [workDir, srcDir].filter(Boolean)
+      [workDir, srcDir, statsArgument ? '--stats' : null].filter(Boolean)
     );
   },
   help: () => {
     console.log(`
-      Usage
-        $ spust <command>
+  Usage
+    $ spust <command>
 
-      Available commands:
-        ${Array.from(commands).join(', ')}
+  Available commands:
+    ${Array.from(commands).join(', ')}
 
-      For more information run a command with help subcommand
-        $ spust build help
+  For more information run a command with help subcommand
+    $ spust build help
     `);
     process.exit(0);
   },
   start: ({ workDir }) => {
-    const srcDir = process.argv[3];
+    const args = new Set(process.argv);
+
+    if (args.has('help') || args.has('--help')) {
+      console.log(`
+  Starts an application in local development mode.
+
+  Usage
+    $ spust start [sourceDirectory]
+      `);
+      process.exit(0);
+    }
+
+    // find first argument not starting with --
+    const srcDir = process.argv.slice(3).find(arg => !arg.startsWith('__'));
+
     return startProcess(
       resolve(__dirname, '../scripts/start.js'),
       [workDir, srcDir].filter(Boolean)
     );
   },
   test: () => {
+    const args = new Set(process.argv);
+
+    if (args.has('help') || args.has('--help')) {
+      console.log(`
+  Starts jest tests in interactive mode, if you aren't in continous integration environment or have coverage turned on.
+  It will look for *.test.js or __tests__/*.js files.
+
+  Usage
+    $ spust test [...jest arguments]
+      `);
+      process.exit(0);
+    }
+
     return startProcess(
       resolve(__dirname, '../scripts/test.js'),
       process.argv.slice(2)
