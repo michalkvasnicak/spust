@@ -61,6 +61,8 @@ export default server;
 ```sh
 # builds bundle for production environment
 yarn spust build
+# or if you want stats for your bundles so you can analyze them using webpack analyse
+yarn spust build -- --stats
 ```
 
 ```sh
@@ -82,6 +84,12 @@ yarn spust build
 ```
 
 Will build project with `src` directory. Make sure you have `src/server/index.js` and `src/client/index.js` files.
+
+```sh
+yarn spust build -- --stats
+```
+
+Will output `client.stats.json` and `server.stats.json` to your current working directory. You can analyze them using [webpack's analyse tool](https://webpack.github.io/analyse/).
 
 ## Local development
 
