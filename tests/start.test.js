@@ -37,6 +37,10 @@ describe('start script', () => {
       resolvePath(__dirname, '../bin/spust'),
       ['start', srcDir],
       {
+        env: {
+          ...process.env,
+          HOST: 'localhost',
+        },
         cwd: workDir,
       },
     );

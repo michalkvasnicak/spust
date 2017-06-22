@@ -7,8 +7,7 @@ exports[`start script works correctly 1`] = `
 
 You can now view your application in the browser.
 
-  Local:            http://localhost:4443/
-  On Your Network:  http://192.168.0.241:4443/
+  http://localhost:4443/
 
 
 Note that the development build is not optimized.
