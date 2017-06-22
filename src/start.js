@@ -6,21 +6,24 @@ process.env.NODE_ENV = 'development';
 
 import { resolve as resolvePath } from 'path';
 import { stat } from 'mz/fs';
-import { choosePort } from 'react-dev-utils/WebpackDevServerUtils';
+import { choosePort, prepareUrls } from 'react-dev-utils/WebpackDevServerUtils';
 import chalk from 'chalk';
 import clearConsole from 'react-dev-utils/clearConsole';
 import errorOverlayMiddleware from 'react-error-overlay/middleware';
 import formatWebpackMessages from 'react-dev-utils/formatWebpackMessages';
+import ms from 'ms';
 import openBrowser from 'react-dev-utils/openBrowser';
-import Progress from './Progress';
 import proxy from 'http-proxy-middleware';
 import rimraf from 'rimraf';
-import ServerManager from './ServerManager';
 import url from 'url';
 import webpack from 'webpack';
 import WebpackDevServer from 'webpack-dev-server';
 
 import configure from './configure';
+import printInstructions from './printInstructions';
+import Progress from './Progress';
+import ServerManager from './ServerProcessManager';
+import type { ServerManagerInterface } from './types';
 
 // crash on unhandledRejection
 process.on('unhandledRejection', err => {
@@ -38,19 +41,29 @@ if (workDir == null) {
 
 async function start(dir: string, sourceDir: string) {
   const useBabili = !!parseInt(process.env.SPUST_USE_BABILI || '0', 10);
+  const doNotOpenBrowser = process.env.SPUST_DO_NOT_OPEN_BROWSER ? true : false;
   const DEFAULT_PORT = parseInt(process.env.WEBPACK_PORT) || 2999;
   const DEFAULT_SERVER_PORT = parseInt(process.env.PORT, 10) || 3000;
-  const HOST = process.env.HOST || 'localhost';
+  const HOST = process.env.HOST || '0.0.0.0';
   const protocol = process.env.HTTPS === 'true' ? 'https' : 'http';
   let isCompiled = false;
 
   const webpackPort: number = await choosePort(HOST, DEFAULT_PORT);
   const serverPort: number = await choosePort(HOST, DEFAULT_SERVER_PORT);
+  const urls = prepareUrls(protocol, HOST, webpackPort);
 
   // set server port to env so we can use it in env variables for webpack
   process.env.PORT = String(serverPort);
 
-  const serverManager = new ServerManager(serverPort);
+  const serverManager: ServerManagerInterface = new ServerManager(serverPort, dir);
+
+  // close server manager on termination
+  ['SIGINT', 'SIGTERM'].forEach(signal =>
+    process.on(signal, () => {
+      serverManager.close();
+      process.exit();
+    }),
+  );
 
   let config = await configure({
     workDir: dir,
@@ -82,19 +95,7 @@ async function start(dir: string, sourceDir: string) {
     }
   }
 
-  await new Promise((resolve, reject) =>
-    rimraf(resolvePath(workDir, 'bundle'), err => {
-      if (err) {
-        reject(err);
-      } else {
-        resolve();
-      }
-    }),
-  );
-
-  // because ServerListenerPlugin is overriding console.log so your server script can't output
-  // anything using console.log until the management of server is done by ServerManager
-  const log = console.log;
+  rimraf.sync(resolvePath(workDir, 'bundle'));
 
   const compiler = webpack([config.client, config.server]);
   const target = `http://localhost:${serverPort}`;
@@ -102,15 +103,18 @@ async function start(dir: string, sourceDir: string) {
   const progress = new Progress(compiler.compilers);
 
   compiler.plugin('invalid', () => {
-    if (isInteractive) {
+    // clear only after first done pass
+    if (isInteractive && isCompiled) {
       clearConsole();
     }
 
     progress.start();
   });
 
-  compiler.plugin('done', stats => {
-    isCompiled = true;
+  compiler.plugin('done', async stats => {
+    let hasWarnings = false;
+    let warnings = '';
+
     progress.stop();
 
     if (isInteractive) {
@@ -123,28 +127,57 @@ async function start(dir: string, sourceDir: string) {
     const serverMessages = formatWebpackMessages(serverStats.toJson({}, true));
 
     if (clientMessages.errors.length || serverMessages.errors.length) {
-      log(chalk.red('Failed to compile.\n'));
-      log([...clientMessages.errors, ...serverMessages.errors].join('\n'));
+      console.log(chalk.red('⚠️  Failed to compile.\n'));
+      console.log([...clientMessages.errors, ...serverMessages.errors].join('\n'));
+      console.log(chalk.cyan('ℹ️  Keeping previous server instance running'));
       return;
     }
 
     if (clientMessages.warnings.length || serverMessages.warnings.length) {
-      log(chalk.yellow('Compiled with warnings.\n'));
-      log([...clientMessages.warnings, ...serverMessages.warnings].join('\n\n'));
+      hasWarnings = true;
+      warnings = [...clientMessages.warnings, ...serverMessages.warnings].join('\n');
     }
 
-    if (
-      !clientMessages.errors.length &&
-      !serverMessages.errors.length &&
-      !clientMessages.warnings.length &&
-      !serverMessages.warnings.length
-    ) {
-      if (isCompiled) {
-        log(chalk.green('Compiled successfully!'));
+    const resultColor = hasWarnings ? 'yellow' : 'green';
+    const resultState = isCompiled ? 'Updated' : 'Compiled';
+    const resultMessage = hasWarnings ? 'with warnings' : 'successfully';
+
+    console.log(chalk[resultColor](`🎉  ${resultState} ${resultMessage}!`));
+
+    // now check if in ServerManager has any errors from management
+    // if yes, then output readable message about it
+    if (!serverManager.isRunning()) {
+      if (serverManager.lastSpawnErrors().length > 0) {
+        console.log(chalk.red('⚠️  Server is not running, see errors:\n'));
+        console.log(serverManager.lastSpawnErrors().join('\n'));
       } else {
-        log(chalk.green('Updated successfully!'));
+        console.log(chalk.red('⚠️  Server is not running because of an unkown error!\n'));
       }
+    } else {
+      if (serverManager.lastSpawnErrors().length > 0) {
+        console.log(chalk.red('⚠️  Failed to spawn a new server for your backend, see errors:\n'));
+        console.log(serverManager.lastSpawnErrors().join('\n\n'));
+        console.log(chalk.cyan('ℹ️  Keeping previous server running.'));
+      }
+
+      // if apps wasn't compiled yet, open browser (if user's did not tell otherwise)
+      if (!doNotOpenBrowser && !isCompiled) {
+        openBrowser(
+          url.format({
+            protocol,
+            hostname: 'localhost',
+            port: webpackPort,
+          }),
+        );
+      }
+
+      // print nice info :)
+      printInstructions(urls);
     }
+
+    // set flag that it has been successfully compiled
+    // so in next builds it will result to Updated and not Compiled
+    isCompiled = true;
   });
 
   progress.start();
@@ -173,6 +206,8 @@ async function start(dir: string, sourceDir: string) {
       () => ({
         context: pathname =>
           pathname.indexOf('sockjs-node') === -1 && pathname.indexOf('hot-update.json') === -1,
+        // wait for 10 minutes in case that server has error, so user can fix it :)
+        proxyTimeout: ms('10 minutes'),
         target,
         logLevel: 'silent',
         onProxyReq: proxyReq => {
@@ -180,10 +215,10 @@ async function start(dir: string, sourceDir: string) {
             proxyReq.setHeader('origin', target);
           }
         },
-        onProxyError: (err, req, res) => {
+        onError: (err, req, res) => {
           const host = req.headers && req.headers.host;
-          log(
-            chalk.red('Proxy error:') +
+          console.log(
+            chalk.red('⚠️  Proxy error:') +
               ' Could not proxy request ' +
               chalk.cyan(req.url) +
               ' from ' +
@@ -192,19 +227,19 @@ async function start(dir: string, sourceDir: string) {
               chalk.cyan(target) +
               '.',
           );
-          log(
+          console.log(
             'See https://nodejs.org/api/errors.html#errors_common_system_errors for more information (' +
               chalk.cyan(err.code) +
               ').',
           );
-          log();
+          console.log();
 
           // And immediately send the proper error response to the client.
           // Otherwise, the request will eventually timeout with ERR_EMPTY_RESPONSE on the client side.
           if (res.writeHead && !res.headersSent) {
             res.writeHead(500);
           }
-          res.end('Proxy error: Could not proxy request');
+          res.end('⚠️  Proxy error: Could not proxy request');
         },
         secure: false,
         changeOrigin: true,
@@ -219,32 +254,26 @@ async function start(dir: string, sourceDir: string) {
       app.use(errorOverlayMiddleware());
     },
     watchOptions: {
-      ignored: /node_modules/,
+      ignored: /bundle|node_modules/,
     },
   });
 
   devServer.listen(webpackPort, HOST, err => {
     if (err) {
-      return log(err);
+      return console.log(err);
     }
 
     if (isInteractive) {
       clearConsole();
     }
 
-    log(chalk.cyan('Starting the development server...\n'));
+    console.log(chalk.cyan('🚀  Starting the development server...'));
 
-    if (process.env.SPUST_DO_NOT_OPEN_BROWSER) {
-      return;
+    if (!doNotOpenBrowser) {
+      console.log(chalk.cyan('ℹ️  I will open the browser after successful compilation.'));
     }
 
-    openBrowser(
-      url.format({
-        protocol,
-        hostname: 'localhost',
-        port: webpackPort,
-      }),
-    );
+    console.log();
   });
 
   ['SIGINT', 'SIGTERM'].forEach(sig => {

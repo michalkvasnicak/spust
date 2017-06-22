@@ -4,6 +4,11 @@
 const http = require('http');
 const https = require('https');
 
+export type ShutdownableServer = net$Server & {
+  isOpening(): boolean,
+  forceShutdown(): Promise<void>,
+};
+
 function wrap(server: Class<net$Server>) {
   if (server.$$wrapped) {
     return;

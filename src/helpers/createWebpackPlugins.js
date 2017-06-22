@@ -6,10 +6,11 @@ import CaseSensitivePathsPlugin from 'case-sensitive-paths-webpack-plugin';
 import CompressionPlugin from 'compression-webpack-plugin';
 import ExtractTextPlugin from 'extract-text-webpack-plugin';
 import chalk from 'chalk';
-import ServerManager from '../ServerManager';
-import ServerListenerPlugin from '../ServerListenerPlugin';
 import WatchMissingNodeModulesPlugin from 'react-dev-utils/WatchMissingNodeModulesPlugin';
 import webpack from 'webpack';
+
+import type { ServerManagerInterface } from '../types';
+import ServerListenerPlugin from '../ServerListenerPlugin';
 
 // detect offline plugin
 let OfflinePlugin;
@@ -30,7 +31,7 @@ export default function createWebpackPlugins(
     serverBundlePath: string,
     isDev: boolean,
     isServer: boolean,
-    serverManager: ?ServerManager,
+    serverManager: ?ServerManagerInterface,
     useBabili: boolean,
   },
   envVariables: Object,

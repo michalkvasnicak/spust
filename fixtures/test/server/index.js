@@ -26,6 +26,8 @@ const server = createServer((req, res) => {
   `);
 });
 
-server.listen(3001, '0.0.0.0', () => console.log('listening on 3001'));
+const PORT = parseInt(process.env.PORT || 3000, 10);
+
+server.listen(PORT, '0.0.0.0', () => console.log(`listening on ${PORT}`));
 
 export default server;

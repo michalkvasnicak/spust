@@ -5,10 +5,10 @@ import { stat, readFile } from 'mz/fs';
 import dotenv from 'dotenv';
 import chalk from 'chalk';
 import nodeExternals from 'webpack-node-externals';
-import ServerManager from './ServerManager';
 import webpack from 'webpack';
 
 import { createWebpackLoaders, createWebpackPlugins, loadEnvVariables } from './helpers';
+import type { ServerManagerInterface } from './types';
 
 export type WebpackConfig = {
   devtool: string,
@@ -53,7 +53,7 @@ export type Configuration = {
 
 type Args = {
   env: 'development' | 'production',
-  serverManager?: ?ServerManager,
+  serverManager?: ?ServerManagerInterface,
   srcDir: string,
   useBabili: boolean,
   workDir: string,
@@ -78,10 +78,8 @@ async function configure({
     CLIENT_BUNDLE_PATH: clientBundlePath,
     SERVER_BUNDLE_PATH: serverBundlePath,
     NODE_ENV: env,
-    // this is set in build.js or start.js, you can override it using env variables
-    // but we will force this PORT during development to ensure
-    // that your backend is running on the given port so we can proxy requests easily
-    PORT: process.env.PORT,
+    // for build.js this is not specified because we want user to have option to change it
+    // PORT: process.env.PORT,
     ...(await loadEnvVariables(workDir)),
     // force port from start.js during development
     // because of proxying requests
