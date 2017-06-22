@@ -3,9 +3,9 @@
 [![npm](https://img.shields.io/npm/v/spust.svg)](https://www.npmjs.com/package/spust)
 [![CircleCI](https://circleci.com/gh/michalkvasnicak/spust.svg?style=svg&circle-token=39f82c45c86ac3cd0b5a94f62a1c41919edd86ec)](https://circleci.com/gh/michalkvasnicak/spust)
 
-> Quickly bootstrap universal javascript application.
+> 🚀 Quickly bootstrap universal javascript application.
 
-**Under the development, API can change, feel free to report bugs, open PRs, etc...**
+** ⚠️ Under the development, API can change, feel free to report bugs, open PRs, etc...**
 
 * [Installation](#installation)
 * [Requirements](#requirements)
