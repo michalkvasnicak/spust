@@ -30,8 +30,7 @@ process.on('unhandledRejection', err => {
   throw err;
 });
 
-// $FlowExpectError
-const isInteractive = process.stdout.isTTY;
+const isInteractive = (process.stdout: any).isTTY;
 const srcDir = process.argv.slice(3).find(arg => !arg.startsWith('--')) || 'src';
 const workDir: ?string = process.argv[2];
 

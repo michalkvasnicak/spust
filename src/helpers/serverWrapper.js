@@ -16,8 +16,7 @@ function wrap(server: Class<net$Server>) {
 
   const originalListen = server.prototype.listen;
 
-  // $FlowExpectError
-  server.prototype.onConnection = function onConnection(socket) {
+  (server.prototype: any).onConnection = function onConnection(socket) {
     const socketId = this.socketId++;
     this.sockets[socketId] = socket;
 
@@ -26,26 +25,22 @@ function wrap(server: Class<net$Server>) {
     });
   };
 
-  // $FlowExpectError
-  server.prototype.isOpening = function isOpening() {
+  (server.prototype: any).isOpening = function isOpening() {
     return !!this.opening;
   };
 
-  // $FlowExpectError
-  server.prototype.setAsOpening = function setAsOpening() {
+  (server.prototype: any).setAsOpening = function setAsOpening() {
     this.opening = true;
   };
 
-  // $FlowExpectError
-  server.prototype.setAsNotOpening = function setAsNotOpening() {
+  (server.prototype: any).setAsNotOpening = function setAsNotOpening() {
     this.opening = false;
 
     this.removeListener('listening', setAsNotOpening);
     this.removeListener('error', setAsNotOpening);
   };
 
-  // $FlowExpectError
-  server.prototype.forceShutdown = async function shutdown() {
+  (server.prototype: any).forceShutdown = async function shutdown() {
     return new Promise(resolve => {
       this.removeListener('connection', this.onConnection);
       this.removeListener('secureConnection', this.onConnection);
@@ -58,8 +53,7 @@ function wrap(server: Class<net$Server>) {
     });
   };
 
-  // $FlowExpectError
-  server.prototype.listen = function listen() {
+  (server.prototype: any).listen = function listen() {
     this.setAsOpening();
     this.sockets = {};
     this.socketId = 0;
@@ -72,8 +66,7 @@ function wrap(server: Class<net$Server>) {
     return originalListen.apply(this, arguments);
   };
 
-  // $FlowExpectError
-  server.$$wrapped = true;
+  (server: any).$$wrapped = true;
 }
 
 wrap(http.Server);
