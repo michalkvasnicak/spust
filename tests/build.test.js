@@ -1,8 +1,8 @@
 // @flow
 
+import { spawnSync } from 'child_process';
 import rimraf from 'rimraf';
 import { resolve as resolvePath } from 'path';
-import { spawn } from 'mz/child_process';
 
 describe('build script', () => {
   afterEach(() =>
@@ -22,32 +22,17 @@ describe('build script', () => {
     ]),
   );
 
-  it('works correctly', async () => {
-    jasmine.DEFAULT_TIMEOUT_INTERVAL = 50000;
+  it('works correctly', () => {
     const workDir = resolvePath(__dirname, '../');
     const srcDir = 'fixtures/test';
 
     // make sure we have compiled sources
-    const proc: child_process$ChildProcess = await spawn(
-      resolvePath(__dirname, '../bin/spust'),
-      ['build', srcDir],
-      {
-        cwd: workDir,
-      },
-    );
-
-    const output = [];
-    const errorOutput = [];
-
-    proc.stdout.on('data', data => output.push(data));
-    proc.stderr.on('data', data => errorOutput.push(data));
-
-    const code = await new Promise(resolve => {
-      proc.on('exit', resolve);
+    const proc = spawnSync(resolvePath(__dirname, '../bin/spust'), ['build', srcDir], {
+      cwd: workDir,
     });
 
-    expect(output.join('').trim()).toMatchSnapshot();
-    expect(errorOutput.join('').trim()).toMatchSnapshot();
-    expect(code).toBe(0);
+    expect(proc.status).toBe(0);
+    expect(Buffer.from(proc.stdout).toString('utf8').trim()).toMatchSnapshot();
+    expect(Buffer.from(proc.stderr).toString('utf8').trim()).toMatchSnapshot();
   });
 });

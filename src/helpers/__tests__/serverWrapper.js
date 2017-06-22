@@ -1,6 +1,6 @@
 // @flow
 
-import type { ShutdownableServer } from '../serverReplacer';
+import type { ShutdownableServer } from '../serverWrapper';
 
 describe('serverWrapper', () => {
   let server: ?ShutdownableServer;

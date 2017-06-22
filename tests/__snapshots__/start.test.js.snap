@@ -1,9 +1,18 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`start script works correctly 1`] = `
-"Starting the development server...
+"🚀  Starting the development server...
 
-Compiled successfully!"
+🎉  Compiled successfully!
+
+You can now view your application in the browser.
+
+  http://localhost:4443/
+
+
+Note that the development build is not optimized.
+
+To create a production build use yarn spust build"
 `;
 
 exports[`start script works correctly 2`] = `""`;

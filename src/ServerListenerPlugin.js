@@ -1,41 +1,39 @@
 // @flow
 
 import path from 'path';
-import ServerManager from './ServerManager';
+
+import type { ServerManagerInterface } from './types';
 
 module.exports = class ServerListenerPlugin {
   serverManager: Object;
 
-  constructor(serverManager: ServerManager) {
+  constructor(serverManager: ServerManagerInterface) {
     this.serverManager = serverManager;
 
     ['SIGINT', 'SIGTERM'].forEach(signal => process.on(signal, () => this.serverManager.close()));
   }
 
   apply(compiler: Object): void {
-    compiler.plugin('done', async stats => {
-      if (stats.hasErrors()) {
-        console.error('Server compiled with errors, keeping previous server instance running');
-        return;
-      }
-
-      // Clear out all files from this build
-      Object.keys(require.cache).forEach(modulePath => {
-        if (modulePath.indexOf(compiler.options.output.path) === 0) {
-          delete require.cache[modulePath];
-        }
-      });
-
-      const serverBuildPath = path.resolve(
-        compiler.options.output.path,
-        compiler.options.output.filename,
-      );
+    // probably this isn't a right place to do server management
+    // but done does not care about async
+    // and we have to wait on our server to listen
+    // so when done is called in start.js we can be sure that when browser opens, it won't result in
+    // error 504
+    compiler.plugin('after-emit', async (compilation: any, cb: Function) => {
+      const serverBundle = compilation.compiler.outputPath;
+      const serverBuildPath = path.resolve(serverBundle, compiler.options.output.filename);
 
       const serverSource = Buffer.from(
-        stats.compilation.compiler.outputFileSystem.readFileSync(serverBuildPath),
+        compilation.compiler.outputFileSystem.readFileSync(serverBuildPath),
       ).toString('utf8');
 
-      await this.serverManager.manage(serverSource);
+      try {
+        await this.serverManager.manage(serverSource, serverBundle);
+      } catch (e) {
+        // we don't care about errors, they are stored in internal state of ServerManager
+      } finally {
+        cb();
+      }
     });
   }
 };

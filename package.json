@@ -45,8 +45,7 @@
     "lint": "eslint src",
     "format": "eslint src --fix",
     "prepublishOnly": "npm run lint && npm run build",
-    "test": "npm run build && jest",
-    "test:watch": "npm run build && jest --watch"
+    "test": "jest --runInBand"
   },
   "dependencies": {
     "assets-webpack-plugin": "^3.5.1",
@@ -85,6 +84,8 @@
     "http-proxy-middleware": "^0.17.4",
     "jest": "^20.0.4",
     "json-loader": "^0.5.4",
+    "mkdirp": "^0.5.1",
+    "ms": "^2.0.0",
     "mz": "^2.6.0",
     "node-fetch": "^1.7.1",
     "object-assign": "^4.1.1",
