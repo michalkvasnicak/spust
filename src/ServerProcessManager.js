@@ -4,6 +4,7 @@ import mkdirp from 'mkdirp';
 import { fork } from 'child_process';
 import { resolve as resolvePath } from 'path';
 import { existsSync, readFileSync, unlinkSync, writeFileSync } from 'fs';
+import terminate from 'terminate';
 
 export default class ServerProcessManager {
   currentServer: ?child_process$ChildProcess;
@@ -91,19 +92,7 @@ export default class ServerProcessManager {
         return resolve();
       }
 
-      server.on('error', e => {
-        server.removeAllListeners('error');
-        server.removeAllListeners('exit');
-        reject(e);
-      });
-
-      server.on('exit', () => {
-        server.removeAllListeners('error');
-        server.removeAllListeners('exit');
-        resolve();
-      });
-
-      server.kill('SIGTERM');
+      terminate(server.pid, { timeout: 30000 }, err => (err ? reject(err) : resolve()));
     });
   }
 
@@ -112,10 +101,6 @@ export default class ServerProcessManager {
   }
 
   async manage(newServerCode: string, bundleDirectory: string) {
-    const previousServerCodeFile = this.currentServerCodeFile;
-
-    this.currentServer = null;
-
     // create a new file with
     const serverCode = this.serverProcessTemplate.replace(
       // hack, I don't want to waste time trying which combination works for interpolation
@@ -132,6 +117,8 @@ export default class ServerProcessManager {
 
       // now kill previous server
       await this.killServer();
+
+      this.currentServer = null;
 
       const serverProc = await this.spawnServer(serverCodeFile);
 
