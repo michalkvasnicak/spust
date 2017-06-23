@@ -114,6 +114,7 @@ async function configure({
       },
       resolve: {
         extensions: ['.js', '.json', '.jsx'],
+        modules: ['node_modules', resolvePath(workDir, './node_modules')],
         alias: {
           'babel-runtime': dirname(require.resolve('babel-runtime/package.json')),
         },
@@ -167,6 +168,7 @@ async function configure({
       },
       resolve: {
         extensions: ['.js', '.json', '.jsx'],
+        modules: ['node_modules', resolvePath(workDir, './node_modules')],
       },
       module: {
         strictExportPresence: true,
