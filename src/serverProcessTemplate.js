@@ -1,5 +1,10 @@
 // @flow
 
+// crash on unhandledRejection
+process.on('unhandledRejection', err => {
+  throw err;
+});
+
 const net = require('net');
 // prettier-ignore
 const server = eval("__SERVER_CODE__");
