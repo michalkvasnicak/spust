@@ -11,10 +11,11 @@ dependencies:
 dependencies:
   override:
     - yarn
+    - ./node_modules/.bin/lerna bootstrap
+    - yarn build
 
 test:
   override:
-    - yarn build
     - yarn lint
     - yarn flow
     - yarn test -- --coverage --coverageDirectory $CIRCLE_ARTIFACTS

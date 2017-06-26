@@ -1,0 +1,29 @@
+{
+  "env": {
+    "browser": true,
+    "jest": true,
+    "node": true
+  },
+  "extends": [
+    "plugin:flowtype/recommended",
+    "prettier"
+  ],
+  "plugins": [
+    "flowtype",
+    "prettier"
+  ],
+  "rules": {
+    "flowtype/generic-spacing": "off",
+    "flowtype/no-types-missing-file-annotation": "off",
+    "flowtype/space-after-type-colon": "off",
+    "prettier/prettier": [
+      "error",
+      {
+        "trailingComma": "all",
+        "singleQuote": true,
+        "printWidth": 100,
+        "tabWidth": 2
+      }
+    ]
+  }
+}

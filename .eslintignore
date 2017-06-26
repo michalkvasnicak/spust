@@ -1,2 +1,4 @@
 bin
 flow-typed
+node_modules
+packages/**/scripts
