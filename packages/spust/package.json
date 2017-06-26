@@ -16,8 +16,11 @@
   },
   "devDependencies": {
     "babel-cli": "^6.24.1",
+    "eslint-config-prettier": "^2.2.0",
+    "eslint-plugin-prettier": "^2.1.2",
     "flow-bin": "^0.48.0",
     "flow-copy-source": "^1.1.0",
+    "prettier": "^1.4.4",
     "rimraf": "^2.6.1"
   },
   "scripts": {
