@@ -110,21 +110,24 @@ const clientEnvPresets = [
   [
     require.resolve('babel-preset-env'),
     {
-      targets: {
-        ...(useBabili ? { browsers: '> 2%' } : {}),
-        ...(!useBabili
+      targets: Object.assign(
+        {},
+        useBabili ? { browsers: '> 2%' } : {},
+        !useBabili
           ? {
               ie: 10,
               // We currently minify with uglify
               // Remove after https://github.com/mishoo/UglifyJS2/issues/448
               uglify: true,
             }
-          : {}),
-      },
-      // Disable polyfill transforms
-      useBuiltIns: false,
-      // Do not transform modules to CJS
-      modules: false,
+          : {},
+        {
+          // Disable polyfill transforms
+          useBuiltIns: false,
+          // Do not transform modules to CJS
+          modules: false,
+        },
+      ),
     },
   ],
 ];
