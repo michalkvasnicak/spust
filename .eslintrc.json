@@ -1,21 +1,12 @@
 {
-  "env": {
-    "browser": true,
-    "jest": true,
-    "node": true
-  },
   "extends": [
-    "plugin:flowtype/recommended",
+    "react-app",
     "prettier"
   ],
   "plugins": [
-    "flowtype",
     "prettier"
   ],
   "rules": {
-    "flowtype/generic-spacing": "off",
-    "flowtype/no-types-missing-file-annotation": "off",
-    "flowtype/space-after-type-colon": "off",
     "prettier/prettier": [
       "error",
       {
