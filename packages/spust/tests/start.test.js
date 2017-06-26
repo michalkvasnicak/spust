@@ -1,6 +1,7 @@
 // @flow
 
 import rimraf from 'rimraf';
+import terminate from 'terminate';
 import { resolve as resolvePath } from 'path';
 import { spawn } from 'mz/child_process';
 
@@ -49,22 +50,24 @@ describe('start script', () => {
     const output = [];
     const errorOutput = [];
 
-    proc.stdout.on('data', data => {
-      output.push(data);
-
-      if (output.join('').indexOf('Compiled successfully!') !== -1) {
-        proc.kill('SIGINT');
-      }
-    });
-
     proc.stderr.on('data', data => errorOutput.push(data));
 
-    const code = await new Promise(resolve => {
-      proc.on('exit', resolve);
+    await new Promise(resolve => {
+      proc.stdout.on('data', data => {
+        output.push(data);
+
+        if (output.join('').indexOf('Compiled successfully!') !== -1) {
+          resolve();
+        }
+      });
     });
+
+    // now kill process
+    await new Promise((resolve, reject) =>
+      terminate(proc.pid, err => (err ? reject(err) : resolve())),
+    );
 
     expect(output.join('').trim()).toMatchSnapshot();
     expect(errorOutput.join('').trim()).toMatchSnapshot();
-    expect(code).toBe(0);
   });
 });
