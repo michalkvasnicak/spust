@@ -1,5 +1,3 @@
-'use strict';
-
 const env = process.env.BABEL_ENV || process.env.NODE_ENV;
 const useBabili = !!parseInt(process.env.SPUST_USE_BABILI || '0', 10);
 

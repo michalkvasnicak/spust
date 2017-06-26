@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 // @flow
+/* eslint-disable import/first */
 
 process.env.BABEL_ENV = 'production';
 process.env.NODE_ENV = 'production';

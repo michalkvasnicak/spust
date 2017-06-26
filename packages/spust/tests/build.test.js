@@ -1,7 +1,6 @@
 // @flow
 
 import { spawnSync } from 'child_process';
-import rimraf from 'rimraf';
 import { resolve as resolvePath } from 'path';
 
 describe('build script', () => {

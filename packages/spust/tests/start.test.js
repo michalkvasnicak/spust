@@ -28,6 +28,7 @@ describe('start script', () => {
   );
 
   it('works correctly', async () => {
+    // eslint-disable-next-line
     jasmine.DEFAULT_TIMEOUT_INTERVAL = 50000;
     const workDir = resolvePath(__dirname, '../');
     const srcDir = 'fixtures/test';

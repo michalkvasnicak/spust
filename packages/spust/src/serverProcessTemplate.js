@@ -1,4 +1,5 @@
 // @flow
+/* eslint-disable no-eval */
 
 // crash on unhandledRejection
 process.on('unhandledRejection', err => {

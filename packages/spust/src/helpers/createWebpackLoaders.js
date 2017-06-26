@@ -2,7 +2,6 @@
 
 import ExtractTextPlugin from 'extract-text-webpack-plugin';
 import eslintFormatter from 'react-dev-utils/eslintFormatter';
-import { resolve as resolvePath } from 'path';
 
 export default function createWebpackLoaders(
   { appDir, isDev, isServer }: { appDir: string, isDev: boolean, isServer: boolean },

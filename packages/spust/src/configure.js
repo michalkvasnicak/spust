@@ -1,11 +1,7 @@
 // @flow
 
 import { dirname, relative as relativePath, resolve as resolvePath } from 'path';
-import { stat, readFile } from 'mz/fs';
-import dotenv from 'dotenv';
-import chalk from 'chalk';
 import nodeExternals from 'webpack-node-externals';
-import webpack from 'webpack';
 
 import { createWebpackLoaders, createWebpackPlugins, loadEnvVariables } from './helpers';
 import type { ServerManagerInterface } from './types';

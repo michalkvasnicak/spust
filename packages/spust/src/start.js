@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 // @flow
+/* eslint-disable import/first */
 
 process.env.BABEL_ENV = 'development';
 process.env.NODE_ENV = 'development';
@@ -13,7 +14,6 @@ import errorOverlayMiddleware from 'react-error-overlay/middleware';
 import formatWebpackMessages from 'react-dev-utils/formatWebpackMessages';
 import ms from 'ms';
 import openBrowser from 'react-dev-utils/openBrowser';
-import proxy from 'http-proxy-middleware';
 import rimraf from 'rimraf';
 import url from 'url';
 import webpack from 'webpack';
@@ -41,7 +41,7 @@ if (workDir == null) {
 async function start(dir: string, sourceDir: string) {
   const useBabili = !!parseInt(process.env.SPUST_USE_BABILI || '0', 10);
   const doNotOpenBrowser = process.env.SPUST_DO_NOT_OPEN_BROWSER ? true : false;
-  const DEFAULT_PORT = parseInt(process.env.WEBPACK_PORT) || 2999;
+  const DEFAULT_PORT = parseInt(process.env.WEBPACK_PORT, 10) || 2999;
   const DEFAULT_SERVER_PORT = parseInt(process.env.PORT, 10) || 3000;
   const HOST = process.env.HOST || '0.0.0.0';
   const protocol = process.env.HTTPS === 'true' ? 'https' : 'http';
@@ -142,6 +142,10 @@ async function start(dir: string, sourceDir: string) {
     const resultMessage = hasWarnings ? 'with warnings' : 'successfully';
 
     console.log(chalk[resultColor](`🎉  ${resultState} ${resultMessage}!`));
+
+    if (warnings.length > 1) {
+      console.log(warnings);
+    }
 
     // now check if in ServerManager has any errors from management
     // if yes, then output readable message about it
