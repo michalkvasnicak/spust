@@ -5,7 +5,7 @@
   "scripts": {
     "build": "lerna run build",
     "flow": "flow check",
-    "format": "eslint src --fix",
+    "format": "eslint packages --fix",
     "lerna": "lerna",
     "lerna-changelog": "lerna-changelog",
     "lint": "eslint packages",
