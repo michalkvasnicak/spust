@@ -124,6 +124,15 @@ See [koa cors's documentation](https://github.com/koajs/cors)
 * `path`: `string` - optional prop
 * `endpointURL`: `string` - optional prop, path to graphql endpoint
 
+### `RenderApp<{ render: (ctx: Koa2Context) => Promise<Result> | Result}>`
+
+> Renders your application
+
+#### Props
+
+* `render`: **required prop**, see [documentation](./src/RenderApp.js#55)
+  * `ctx`: `Koa2Context`, see [Koa 2.0 context api documentation](https://github.com/koajs/koa/blob/master/docs/api/context.md)
+
 ### `Secure<props>`
 
 > Secures your application, see [helmet's documentation](https://www.npmjs.com/search?q=helmet) and [hpp's documentation](https://www.npmjs.com/package/hpp)
