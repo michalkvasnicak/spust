@@ -10,5 +10,6 @@ packages/*
 [libs]
 
 ./packages/spust/flow-typed
+./packages/spust-koa/flow-typed
 
 [options]

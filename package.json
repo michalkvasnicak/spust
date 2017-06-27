@@ -10,7 +10,8 @@
     "lerna-changelog": "lerna-changelog",
     "lint": "eslint packages",
     "precommit": "lint-staged",
-    "test": "jest --runInBand"
+    "test": "jest --runInBand",
+    "test:watch": "jest --runInBand --watch"
   },
   "devDependencies": {
     "babel-cli": "^6.24.1",
@@ -20,6 +21,7 @@
     "babel-plugin-transform-flow-strip-types": "^6.22.0",
     "babel-plugin-transform-object-rest-spread": "^6.23.0",
     "babel-preset-env": "^1.5.2",
+    "enzyme": "^2.9.1",
     "eslint": "^3.19.0",
     "eslint-config-prettier": "^2.2.0",
     "eslint-config-react-app": "^1.0.4",
@@ -34,7 +36,11 @@
     "lerna": "^2.0.0-rc.5",
     "lerna-changelog": "^0.5.0",
     "lint-staged": "^4.0.0",
-    "prettier": "^1.4.4"
+    "prettier": "^1.4.4",
+    "react": "^15.6.1",
+    "react-dom": "^15.6.1",
+    "react-test-renderer": "^15.6.1",
+    "react-test-utils": "^0.0.1"
   },
   "jest": {
     "collectCoverageFrom": [
@@ -51,6 +57,9 @@
       "scripts",
       "flow\\.test\\.(js|jsx)$"
     ],
+    "transform": {
+      "^.+\\.(js|jsx)$": "<rootDir>/packages/spust/src/jest/babelTransform"
+    },
     "transformIgnorePatterns": [
       "[/\\\\]node_modules[/\\\\].+\\.(js|jsx)$"
     ]
