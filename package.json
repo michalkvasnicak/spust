@@ -21,6 +21,7 @@
     "babel-plugin-transform-flow-strip-types": "^6.22.0",
     "babel-plugin-transform-object-rest-spread": "^6.23.0",
     "babel-preset-env": "^1.5.2",
+    "babel-preset-react": "^6.24.1",
     "enzyme": "^2.9.1",
     "eslint": "^3.19.0",
     "eslint-config-prettier": "^2.2.0",
