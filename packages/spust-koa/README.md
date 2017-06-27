@@ -115,3 +115,12 @@ export default serve(
 
 * `path`: `string` - optional prop
 * `endpointURL`: `string` - optional prop, path to graphql endpoint
+
+### `Session<{ key: string, store: Object, cookie: Object}>`
+
+> Add support for sessions
+
+#### Props
+
+* `store`: `Object` - **required prop**
+* for whole documentation see [koa-session-minimal's documentation](https://www.npmjs.com/package/koa-session-minimal)
