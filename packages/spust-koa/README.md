@@ -90,6 +90,14 @@ export default serve(
 
 > Parses request's bodies (json, etc)
 
+### `Cors<{ allowMethods, allowHeaders, credentials, exposeHeaders, keepHeadersOnError, maxAge, origin }>`
+
+> Add CORS support to your server
+
+#### Props
+
+See [koa cors's documentation](https://github.com/koajs/cors)
+
 ### `ErrorHandler<{ onError: (e: Error) => void }>`
 
 > Error handler middleware, can be used multiple times to ensure error handling on different levels of your server
