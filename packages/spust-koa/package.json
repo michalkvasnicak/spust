@@ -16,6 +16,8 @@
   "author": "Michal Kvasničák",
   "dependencies": {
     "es6-error": "^4.0.2",
+    "helmet": "^3.6.1",
+    "hpp": "^0.2.2",
     "kcors": "^2.2.1",
     "koa": "^2.3.0",
     "koa-bodyparser": "^4.2.0",

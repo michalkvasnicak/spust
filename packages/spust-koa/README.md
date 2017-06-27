@@ -124,6 +124,28 @@ See [koa cors's documentation](https://github.com/koajs/cors)
 * `path`: `string` - optional prop
 * `endpointURL`: `string` - optional prop, path to graphql endpoint
 
+### `Secure<props>`
+
+> Secures your application, see [helmet's documentation](https://www.npmjs.com/search?q=helmet) and [hpp's documentation](https://www.npmjs.com/package/hpp)
+
+#### Props
+
+* [`contentSecurityPolicy?`](./src/Secure.js#11) - optional prop
+* [`dnsPrefetchControl?`](./src/Secure.js#39) - optional prop
+* [`expectCertificateTransparency`](./src/Secure.js#40) - optional prop
+* [`frameguard`](./src/Secure.js#45) - optional prop
+* [`hidePoweredBy`](./src/Secure.js#49) - optional prop
+* [`httpParameterPollution`](./src/Secure.js#50) - optional prop
+* [`httpPublicKeyPinning`](./src/Secure.js#56) - optional prop
+* [`httpStrictTransportSecurity`](./src/Secure.js#64) - optional prop
+* [`ieNoOpen`](./src/Secure.js#71) - optional prop
+* [`noCache`](./src/Secure.js#72) - optional prop
+* [`noSniff`](./src/Secure.js#73) - optional prop
+* [`referrerPolicy`](./src/Secure.js#74) - optional prop
+* [`xssFilter`](./src/Secure.js#85) - optional prop
+* for more explainations see [helmet's documentation](https://www.npmjs.com/search?q=helmet) and [hpp's documentation](https://www.npmjs.com/package/hpp)
+
+
 ### `Session<{ key: string, store: Object, cookie: Object}>`
 
 > Add support for sessions
