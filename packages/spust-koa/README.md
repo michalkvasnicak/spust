@@ -76,6 +76,16 @@ export default serve(
       * *if you don't use `nested()` in your middleware function, it will call them automatically after the middleware function is finished (but outside of its scope)*
     * `skip`: `Function` - interrupts the execution of the current middleware and proceeds to the next middleware in the current level
 
+### `ApolloGraphQL<{ path: string, methods: string | Array<string>, schema: DocumentNode }>`
+
+> Create GraphQL server using Apollo's Koa middleware
+
+#### Props
+
+* `path`: `string` - optional prop
+* `methods`: `string | Array<string>` - optional prop
+* `schema`: `DocumentNode`: **required prop**, your GraphQL schema
+
 ### `BodyParser`
 
 > Parses request's bodies (json, etc)
@@ -96,3 +106,12 @@ export default serve(
 
 * `dir`: `string` - **required prop**, absolute path to directory
 * ..., see [Koa static cache's options](https://github.com/koajs/static-cache#staticcachedir--options--files)
+
+### `GraphiQL<{ path: string, endpointURL: string }>`
+
+> Creates GraphiQL route
+
+#### Props
+
+* `path`: `string` - optional prop
+* `endpointURL`: `string` - optional prop, path to graphql endpoint
