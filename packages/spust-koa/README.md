@@ -87,3 +87,12 @@ export default serve(
 #### Props
 
 * `onError`: `(e: Error) => void` - **required prop** used to do something with an error (for example report it somewhere)
+
+### `Files<{ dir: string, ...}>`
+
+> Serves static files
+
+#### Props
+
+* `dir`: `string` - **required prop**, absolute path to directory
+* ..., see [Koa static cache's options](https://github.com/koajs/static-cache#staticcachedir--options--files)
