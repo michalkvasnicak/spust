@@ -2,6 +2,48 @@
 # yarn lockfile v1
 
 
+"@types/accepts@*":
+  version "1.3.2"
+  resolved "https://registry.yarnpkg.com/@types/accepts/-/accepts-1.3.2.tgz#52897ad5a51f05ea2f57f8e8136085c7d1c385a5"
+
+"@types/cookies@*":
+  version "0.6.1"
+  resolved "https://registry.yarnpkg.com/@types/cookies/-/cookies-0.6.1.tgz#d12cbd0f8aa6b9f0d3bfb613b958897a0b348731"
+  dependencies:
+    "@types/keygrip" "*"
+    "@types/node" "*"
+
+"@types/graphql@^0.9.0", "@types/graphql@^0.9.1":
+  version "0.9.2"
+  resolved "https://registry.yarnpkg.com/@types/graphql/-/graphql-0.9.2.tgz#5e3a2919a998d0bd9bb86b4b23e9630425bff1b2"
+
+"@types/http-assert@*":
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/@types/http-assert/-/http-assert-1.2.0.tgz#0b82993036e86c6ff2944e033b73b57e85ccdcab"
+
+"@types/keygrip@*":
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/@types/keygrip/-/keygrip-1.0.1.tgz#ff540462d2fb4d0a88441ceaf27d287b01c3d878"
+
+"@types/koa-compose@*":
+  version "3.2.2"
+  resolved "https://registry.yarnpkg.com/@types/koa-compose/-/koa-compose-3.2.2.tgz#dc106e000bbf92a3ac900f756df47344887ee847"
+
+"@types/koa@^2.0.39":
+  version "2.0.39"
+  resolved "https://registry.yarnpkg.com/@types/koa/-/koa-2.0.39.tgz#45ba1249d8849b9b0ff8c1d6d2f80b0838b89ffa"
+  dependencies:
+    "@types/accepts" "*"
+    "@types/cookies" "*"
+    "@types/http-assert" "*"
+    "@types/keygrip" "*"
+    "@types/koa-compose" "*"
+    "@types/node" "*"
+
+"@types/node@*":
+  version "8.0.3"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-8.0.3.tgz#fca61c26f83e5f453166114f57d53a47feb36d45"
+
 abbrev@1:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/abbrev/-/abbrev-1.1.0.tgz#d0554c2256636e2f56e7c2e5ad183f859428d81f"
@@ -288,6 +330,10 @@ builtin-modules@^1.0.0:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/builtin-modules/-/builtin-modules-1.1.1.tgz#270f076c5a72c02f5b65a47df94c5fe3a278892f"
 
+bytes@2.4.0:
+  version "2.4.0"
+  resolved "https://registry.yarnpkg.com/bytes/-/bytes-2.4.0.tgz#7d97196f9d5baf7f6935e25985549edd2a6c2339"
+
 camelcase@^4.1.0:
   version "4.1.0"
   resolved "https://registry.yarnpkg.com/camelcase/-/camelcase-4.1.0.tgz#d545635be1e33c542649c69173e5de6acfae34dd"
@@ -328,6 +374,15 @@ cliui@^3.2.0:
     string-width "^1.0.1"
     strip-ansi "^3.0.1"
     wrap-ansi "^2.0.0"
+
+co-body@^5.1.0:
+  version "5.1.1"
+  resolved "https://registry.yarnpkg.com/co-body/-/co-body-5.1.1.tgz#d97781d1e3344ba4a820fd1806bddf8341505236"
+  dependencies:
+    inflation "^2.0.0"
+    qs "^6.4.0"
+    raw-body "^2.2.0"
+    type-is "^1.6.14"
 
 co@^4.6.0:
   version "4.6.0"
@@ -389,6 +444,10 @@ cookies@~0.7.0:
   dependencies:
     depd "~1.1.0"
     keygrip "~1.0.1"
+
+copy-to@^2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/copy-to/-/copy-to-2.0.1.tgz#2680fbb8068a48d08656b6098092bdafc906f4a5"
 
 core-js@^1.0.0:
   version "1.2.7"
@@ -458,6 +517,10 @@ delegates@^1.0.0:
 depd@1.1.0, depd@^1.1.0, depd@~1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/depd/-/depd-1.1.0.tgz#e1bd82c6aab6ced965b97b88b17ed3e528ca18c3"
+
+deprecated-decorator@^0.1.6:
+  version "0.1.6"
+  resolved "https://registry.yarnpkg.com/deprecated-decorator/-/deprecated-decorator-0.1.6.tgz#00966317b7a12fe92f3cc831f7583af329b86c37"
 
 destroy@^1.0.3:
   version "1.0.4"
@@ -731,6 +794,42 @@ graceful-fs@^4.1.2, graceful-fs@^4.1.4, graceful-fs@^4.1.6:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/graceful-readlink/-/graceful-readlink-1.0.1.tgz#4cafad76bc62f02fa039b2f94e9a3dd3a391a725"
 
+graphql-server-core@^0.9.0:
+  version "0.9.0"
+  resolved "https://registry.yarnpkg.com/graphql-server-core/-/graphql-server-core-0.9.0.tgz#34dac2d90e0b9c5f2c4c666f08dab74c15b8a327"
+  optionalDependencies:
+    "@types/graphql" "^0.9.0"
+
+graphql-server-koa@^0.9.0:
+  version "0.9.0"
+  resolved "https://registry.yarnpkg.com/graphql-server-koa/-/graphql-server-koa-0.9.0.tgz#03b2093bd4645460015bf2cacad53588e6a5d135"
+  dependencies:
+    graphql-server-core "^0.9.0"
+    graphql-server-module-graphiql "^0.9.0"
+  optionalDependencies:
+    "@types/graphql" "^0.9.1"
+    "@types/koa" "^2.0.39"
+
+graphql-server-module-graphiql@^0.9.0:
+  version "0.9.0"
+  resolved "https://registry.yarnpkg.com/graphql-server-module-graphiql/-/graphql-server-module-graphiql-0.9.0.tgz#dfe877066052f94a3ff57ff4790b3023e9ef2b4a"
+
+graphql-tools@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/graphql-tools/-/graphql-tools-1.0.0.tgz#76b25e1dce0521b31d5566aac281b2f134bc49c8"
+  dependencies:
+    deprecated-decorator "^0.1.6"
+    lodash "^4.3.0"
+    uuid "^3.0.1"
+  optionalDependencies:
+    "@types/graphql" "^0.9.0"
+
+graphql@^0.10.3:
+  version "0.10.3"
+  resolved "https://registry.yarnpkg.com/graphql/-/graphql-0.10.3.tgz#c313afd5518e673351bee18fb63e2a0e487407ab"
+  dependencies:
+    iterall "^1.1.0"
+
 har-schema@^1.0.5:
   version "1.0.5"
   resolved "https://registry.yarnpkg.com/har-schema/-/har-schema-1.0.5.tgz#d263135f43307c02c602afc8fe95970c0151369e"
@@ -800,9 +899,13 @@ http-signature@~1.1.0:
     jsprim "^1.2.2"
     sshpk "^1.7.0"
 
-iconv-lite@~0.4.13:
-  version "0.4.18"
-  resolved "https://registry.yarnpkg.com/iconv-lite/-/iconv-lite-0.4.18.tgz#23d8656b16aae6742ac29732ea8f0336a4789cf2"
+iconv-lite@0.4.15, iconv-lite@~0.4.13:
+  version "0.4.15"
+  resolved "https://registry.yarnpkg.com/iconv-lite/-/iconv-lite-0.4.15.tgz#fe265a218ac6a57cfe854927e9d04c19825eddeb"
+
+inflation@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/inflation/-/inflation-2.0.0.tgz#8b417e47c28f925a45133d914ca1fd389107f30f"
 
 inflight@^1.0.4:
   version "1.0.6"
@@ -946,6 +1049,10 @@ isstream@~0.1.2:
   version "0.1.2"
   resolved "https://registry.yarnpkg.com/isstream/-/isstream-0.1.2.tgz#47e63f7af55afa6f92e1500e690eb8b8529c099a"
 
+iterall@^1.1.0:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/iterall/-/iterall-1.1.1.tgz#f7f0af11e9a04ec6426260f5019d9fcca4d50214"
+
 js-tokens@^3.0.0:
   version "3.0.1"
   resolved "https://registry.yarnpkg.com/js-tokens/-/js-tokens-3.0.1.tgz#08e9f132484a2c45a30907e9dc4d5567b7f114d7"
@@ -1020,6 +1127,13 @@ kind-of@^4.0.0:
   resolved "https://registry.yarnpkg.com/kind-of/-/kind-of-4.0.0.tgz#20813df3d712928b207378691a45066fae72dd57"
   dependencies:
     is-buffer "^1.1.5"
+
+koa-bodyparser@^4.2.0:
+  version "4.2.0"
+  resolved "https://registry.yarnpkg.com/koa-bodyparser/-/koa-bodyparser-4.2.0.tgz#bce6e08bc65f8709b6d1faa9411c7f0d8938aa54"
+  dependencies:
+    co-body "^5.1.0"
+    copy-to "^2.0.1"
 
 koa-compose@^3.0.0:
   version "3.2.1"
@@ -1115,7 +1229,7 @@ locate-path@^2.0.0:
     p-locate "^2.0.0"
     path-exists "^3.0.0"
 
-lodash@^4.2.0:
+lodash@^4.2.0, lodash@^4.3.0:
   version "4.17.4"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.4.tgz#78203a4d1c328ae1d86dca6460e369b57f4055ae"
 
@@ -1448,7 +1562,7 @@ punycode@^1.4.1:
   version "1.4.1"
   resolved "https://registry.yarnpkg.com/punycode/-/punycode-1.4.1.tgz#c0d5a63b2718800ad8e1eb0fa5269c84dd41845e"
 
-qs@^6.1.0, qs@~6.4.0:
+qs@^6.1.0, qs@^6.4.0, qs@~6.4.0:
   version "6.4.0"
   resolved "https://registry.yarnpkg.com/qs/-/qs-6.4.0.tgz#13e26d28ad6b0ffaa91312cd3bf708ed351e7233"
 
@@ -1462,6 +1576,14 @@ randomatic@^1.1.3:
   dependencies:
     is-number "^3.0.0"
     kind-of "^4.0.0"
+
+raw-body@^2.2.0:
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/raw-body/-/raw-body-2.2.0.tgz#994976cf6a5096a41162840492f0bdc5d6e7fb96"
+  dependencies:
+    bytes "2.4.0"
+    iconv-lite "0.4.15"
+    unpipe "1.0.0"
 
 rc@^1.1.7:
   version "1.2.1"
@@ -1807,7 +1929,7 @@ tweetnacl@^0.14.3, tweetnacl@~0.14.0:
   version "0.14.5"
   resolved "https://registry.yarnpkg.com/tweetnacl/-/tweetnacl-0.14.5.tgz#5ae68177f192d4456269d108afa93ff8743f4f64"
 
-type-is@^1.5.5:
+type-is@^1.5.5, type-is@^1.6.14:
   version "1.6.15"
   resolved "https://registry.yarnpkg.com/type-is/-/type-is-1.6.15.tgz#cab10fb4909e441c82842eafe1ad646c81804410"
   dependencies:
@@ -1832,6 +1954,10 @@ universalify@^0.1.0:
   version "0.1.0"
   resolved "https://registry.yarnpkg.com/universalify/-/universalify-0.1.0.tgz#9eb1c4651debcc670cc94f1a75762332bb967778"
 
+unpipe@1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/unpipe/-/unpipe-1.0.0.tgz#b2bf4ee8514aae6165b4817829d21b2ef49904ec"
+
 user-home@^1.1.1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/user-home/-/user-home-1.1.1.tgz#2b5be23a32b63a7c9deb8d0f28d485724a3df190"
@@ -1840,7 +1966,7 @@ util-deprecate@~1.0.1:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/util-deprecate/-/util-deprecate-1.0.2.tgz#450d4dc9fa70de732762fbd2d4a28981419a0ccf"
 
-uuid@^3.0.0:
+uuid@^3.0.0, uuid@^3.0.1:
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/uuid/-/uuid-3.1.0.tgz#3dd3d3e790abc24d7b0d3a034ffababe28ebbc04"
 

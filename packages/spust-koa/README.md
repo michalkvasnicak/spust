@@ -76,6 +76,10 @@ export default serve(
       * *if you don't use `nested()` in your middleware function, it will call them automatically after the middleware function is finished (but outside of its scope)*
     * `skip`: `Function` - interrupts the execution of the current middleware and proceeds to the next middleware in the current level
 
+### `BodyParser`
+
+> Parses request's bodies (json, etc)
+
 ### `ErrorHandler<{ onError: (e: Error) => void }>`
 
 > Error handler middleware, can be used multiple times to ensure error handling on different levels of your server
