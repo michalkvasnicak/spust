@@ -1,12 +1,12 @@
 #!/bin/bash
 
-# build everything
-yarn run build
-
 # test everything
 yarn run lint
 yarn run flow
 yarn run test
+
+# build everything
+yarn run build
 
 # publish
 yarn lerna -- publish "$@"
