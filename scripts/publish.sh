@@ -4,6 +4,8 @@
 yarn run build
 
 # test everything
+yarn run lint
+yarn run flow
 yarn run test
 
 # publish
