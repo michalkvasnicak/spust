@@ -17,5 +17,10 @@
       "tag: internal": ":house: Internal"
     },
     "cacheDir": ".changelog"
+  },
+  "commands": {
+    "publish": {
+      "ignore": ["*.md", ".flowconfig"]
+    }
   }
 }
