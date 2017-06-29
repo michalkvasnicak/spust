@@ -13,7 +13,7 @@ type GraphQLContext = {
 
 type DefaultProps = {
   methods: string | Array<string>,
-  options: (ctx: *) => Promise<GraphQLContext> | GraphQLContext,
+  options: (ctx: *) => GraphQLContext | Promise<GraphQLContext>,
   path: string,
 };
 
