@@ -4,6 +4,7 @@
   "packages": [
     "packages/*"
   ],
+  "registry": "https://registry.npmjs.org/",
   "version": "independent",
   "changelog": {
     "repo": "michalkvasnicak/spust",
