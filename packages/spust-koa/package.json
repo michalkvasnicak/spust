@@ -1,7 +1,7 @@
 {
   "name": "spust-koa",
   "description": "Write your Spust Koa backend server using JSX and React.",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "license": "MIT",
   "keywords": [
     "spust",
