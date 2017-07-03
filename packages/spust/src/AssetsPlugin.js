@@ -10,7 +10,7 @@ export default class AssetsPlugin {
   bundlePath: string;
 
   constructor({
-    assetsFilename = '__assets.json',
+    assetsFilename = 'webpack-assets.json',
     path,
   }: {
     assetsFilename?: string,
