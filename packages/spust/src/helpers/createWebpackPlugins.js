@@ -1,6 +1,6 @@
 // @flow
 
-import AssetsPlugin from 'assets-webpack-plugin';
+import AssetsPlugin from '../AssetsPlugin';
 import BabiliPlugin from 'babili-webpack-plugin';
 import CaseSensitivePathsPlugin from 'case-sensitive-paths-webpack-plugin';
 import CompressionPlugin from 'compression-webpack-plugin';
@@ -147,9 +147,7 @@ export default function createWebpackPlugins(
     isServer ? new webpack.optimize.LimitChunkCountPlugin({ maxChunks: 1 }) : null,
 
     // assets plugin, only client side and prod mode
-    !isServer
-      ? new AssetsPlugin({ path: serverBundlePath, fullPath: true, prettyPrint: true })
-      : null,
+    !isServer ? new AssetsPlugin({ path: serverBundlePath }) : null,
 
     // server listener plugin to manage exported server instance
     serverListenerPlugin,
