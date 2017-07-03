@@ -31,7 +31,7 @@
     "flow-bin": "^0.48.0",
     "flow-copy-source": "^1.2.0",
     "graphql": "^0.10.3",
-    "graphql-server-koa": "^0.9.0",
+    "graphql-server-koa": "^1.0.0",
     "graphql-tools": "^1.0.0",
     "prop-types": "^15.5.10",
     "react": "^15.6.1",
@@ -40,7 +40,7 @@
     "supertest": "^3.0.0"
   },
   "peerDependencies": {
-    "graphql-server-koa": "^0.9.0",
+    "graphql-server-koa": "^0.9.0 || ^1.0.0",
     "prop-types": ">=15.0.0 <16.0.0",
     "react": ">=15.0.0 <16.0.0",
     "react-dom": ">=15.0.0 <16.0.0"
