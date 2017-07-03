@@ -208,7 +208,9 @@ async function start(dir: string, sourceDir: string) {
       }),
       () => ({
         context: pathname =>
-          pathname.indexOf('sockjs-node') === -1 && pathname.indexOf('hot-update.json') === -1,
+          pathname.indexOf('sockjs-node') === -1 &&
+          pathname.indexOf('hot-update.json') === -1 &&
+          pathname.indexOf('hot-update.js') === -1,
         // wait for 10 minutes in case that server has error, so user can fix it :)
         proxyTimeout: ms('10 minutes'),
         target,
