@@ -59,6 +59,13 @@ describe('ErrorHandler', () => {
         <ErrorHandler onError={onError}>
           <Middleware
             use={ctx => {
+              if (ctx.path === '/auth') {
+                ctx.throw(401, 'Not authorized');
+              }
+            }}
+          />
+          <Middleware
+            use={ctx => {
               (ctx: any).body += 'a';
             }}
           />
@@ -77,7 +84,15 @@ describe('ErrorHandler', () => {
       false,
     );
 
-    await test(ctx.app.callback()).get('/').expect(200).expect(res => expect(res.text).toBe('a'));
+    await test(ctx.app.callback())
+      .get('/')
+      .expect(500)
+      .expect(res => expect(res.text).toBe('Internal Server Error'));
     expect(onError).toHaveBeenCalledWith(new Error('Test error'));
+    await test(ctx.app.callback())
+      .get('/auth')
+      .expect(401)
+      .expect(res => expect(res.text).toBe('Not authorized'));
+    expect(onError).toHaveBeenCalledWith(new Error('Not authorized'));
   });
 });

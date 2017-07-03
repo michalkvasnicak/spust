@@ -18,7 +18,7 @@ export default function ErrorHandler(props: Props) {
         } catch (e) {
           props.onError(e);
 
-          finish();
+          throw e;
         }
       }}
     >
