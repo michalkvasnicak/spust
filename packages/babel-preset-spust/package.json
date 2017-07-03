@@ -1,0 +1,40 @@
+{
+  "name": "babel-preset-spust",
+  "version": "1.0.0",
+  "description": "Client and server side Babel preset used by Spust",
+  "main": "index.js",
+  "repository": "https://github.com/michalkvasnicak/spust/tree/master/packages/babel-preset-spust",
+  "author": "Michal Kvasničák",
+  "license": "MIT",
+  "engineStrict": true,
+  "engines": {
+    "node": ">=8.0"
+  },
+  "files": [
+    "client.js",
+    "index.js",
+    "server.js"
+  ],
+  "peerDependencies": {
+    "babel-plugin-import-inspector": ">=2.0.0 <3.0",
+    "babel-plugin-styled-components": "^1.1.4",
+    "import-inspector": ">=2.0.0 <3.0",
+    "react-loadable": ">=4.0.0 <5.0",
+    "styled-components": ">=2.0.0 <3.0"
+  },
+  "dependencies": {
+    "babel-plugin-dynamic-import-node": "^1.0.2",
+    "babel-plugin-idx": "^1.5.1",
+    "babel-plugin-syntax-dynamic-import": "^6.18.0",
+    "babel-plugin-transform-class-properties": "^6.24.1",
+    "babel-plugin-transform-object-rest-spread": "^6.23.0",
+    "babel-plugin-transform-react-jsx": "^6.24.1",
+    "babel-plugin-transform-react-jsx-self": "^6.22.0",
+    "babel-plugin-transform-react-jsx-source": "^6.22.0",
+    "babel-plugin-transform-regenerator": "^6.24.1",
+    "babel-plugin-transform-runtime": "^6.23.0",
+    "babel-preset-babili": "^0.1.4",
+    "babel-preset-env": "^1.5.2",
+    "babel-preset-react": "^6.24.1"
+  }
+}
