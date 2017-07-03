@@ -37,7 +37,9 @@ export default function createWebpackLoaders(
             babelrc: false,
             cacheDirectory: isDev,
             presets: [
-              isServer ? require.resolve('../babel/server') : require.resolve('../babel/client'),
+              isServer
+                ? require.resolve('babel-preset-spust/server')
+                : require.resolve('babel-preset-spust/client'),
             ],
           },
         },
