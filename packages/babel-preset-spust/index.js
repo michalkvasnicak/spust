@@ -1,5 +1,6 @@
 const env = process.env.BABEL_ENV || process.env.NODE_ENV;
 const useBabili = !!parseInt(process.env.SPUST_USE_BABILI || '0', 10);
+const notWebpack = !!parseInt(process.env.SPUST_NOT_WEBPACK || '0', 10);
 
 let supportReactLoadable = false;
 let supportStyledComponents = false;
@@ -142,7 +143,7 @@ const serverEnvPresets = [
       // Disable polyfill transforms
       useBuiltIns: false,
       // Do not transform modules to CJS in non test env
-      modules: env === 'test' ? undefined : false,
+      modules: env === 'test' || notWebpack ? undefined : false,
     },
   ],
 ];
