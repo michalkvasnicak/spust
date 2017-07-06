@@ -1,20 +1,18 @@
 // @flow
 
+import chalk from 'chalk';
 import mkdirp from 'mkdirp';
-import { fork } from 'child_process';
-import { resolve as resolvePath } from 'path';
-import { existsSync, readFileSync, unlinkSync, writeFileSync } from 'fs';
 import terminate from 'terminate';
+import { resolve as resolvePath } from 'path';
+import { existsSync, unlinkSync, writeFileSync } from 'fs';
+
+import spawn from './spawnServer';
 
 export default class ServerProcessManager {
   currentServer: ?child_process$ChildProcess;
   currentServerCodeFile: ?string;
   spawnErrors: Array<Error> = [];
   port: number;
-  serverProcessTemplate: string = readFileSync(
-    resolvePath(__dirname, './serverProcessTemplate.js'),
-    { encoding: 'utf8' },
-  );
   workingDirectory: string;
 
   constructor(port?: number = 3000, workingDirectory: string) {
@@ -27,52 +25,7 @@ export default class ServerProcessManager {
     this.spawnErrors = [];
 
     try {
-      const proc = await new Promise((resolve, reject) => {
-        try {
-          const serverProcess = fork(serverFile, [], {
-            cwd: this.workingDirectory,
-            env: process.env,
-            // ignore stdout because we don't want output of console.log
-            stdio: [null, 'ignore', null, 'ipc'],
-          });
-
-          serverProcess.on('exit', code => {
-            serverProcess.removeAllListeners('error');
-            serverProcess.removeAllListeners('exit');
-            serverProcess.removeAllListeners('message');
-
-            if (code !== 0) {
-              reject(new Error(`Server exited with the error code ${code}`));
-            } else {
-              reject(new Error('Unexpected server termination'));
-            }
-          });
-
-          serverProcess.on('error', e => {
-            serverProcess.removeAllListeners('error');
-            serverProcess.removeAllListeners('exit');
-            serverProcess.removeAllListeners('message');
-
-            reject(e);
-          });
-
-          serverProcess.on('message', msg => {
-            if (msg === 'Spust: server listening') {
-              serverProcess.removeAllListeners('error');
-              serverProcess.removeAllListeners('exit');
-              serverProcess.removeAllListeners('message');
-
-              resolve(serverProcess);
-            } else {
-              reject(new Error(`Unknown message ${JSON.stringify(msg, null, '\t')}`));
-            }
-          });
-        } catch (e) {
-          reject(e);
-        }
-      });
-
-      return proc;
+      return await spawn(serverFile, this.workingDirectory, this.port);
     } catch (e) {
       this.spawnErrors.push(e);
 
@@ -92,6 +45,9 @@ export default class ServerProcessManager {
         return resolve();
       }
 
+      // remove all exit listeners so we won't log an error after spawn
+      server.removeAllListeners('exit');
+
       terminate(server.pid, { timeout: 30000 }, err => (err ? reject(err) : resolve()));
     });
   }
@@ -100,18 +56,12 @@ export default class ServerProcessManager {
     return this.spawnErrors;
   }
 
-  async manage(newServerCode: string, bundleDirectory: string) {
-    // create a new file with
-    const serverCode = this.serverProcessTemplate.replace(
-      // hack, I don't want to waste time trying which combination works for interpolation
-      '"__SERVER_CODE__"',
-      JSON.stringify(newServerCode.toString()),
-    );
-
+  async manage(serverCode: string, bundleDirectory: string) {
     // now save it to the bundle dir
     const serverCodeFile = resolvePath(bundleDirectory, `./server.${Date.now()}.js`);
 
     try {
+      let serverStdErr = '';
       mkdirp.sync(bundleDirectory);
       writeFileSync(serverCodeFile, serverCode);
 
@@ -121,6 +71,18 @@ export default class ServerProcessManager {
       this.currentServer = null;
 
       const serverProc = await this.spawnServer(serverCodeFile);
+
+      // now collect all output, so if server terminates we can get an error
+      serverProc.stderr.on(
+        'data',
+        (buffer: Buffer | string) =>
+          (serverStdErr += buffer instanceof Buffer ? buffer.toString('utf8') : buffer),
+      );
+
+      serverProc.once('exit', code => {
+        console.log(chalk.red(`Server unexpectedly terminated with the code ${code}`));
+        console.log(serverStdErr);
+      });
 
       // remove previous server code file
       if (this.currentServerCodeFile) {
