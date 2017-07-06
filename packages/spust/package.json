@@ -63,6 +63,7 @@
     "mz": "^2.6.0",
     "node-fetch": "^1.7.1",
     "object-assign": "^4.1.1",
+    "port-pid": "^0.0.6",
     "postcss-cssnext": "^2.11.0",
     "postcss-flexbugs-fixes": "^3.0.0",
     "postcss-import": "^10.0.0",

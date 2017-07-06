@@ -94,7 +94,7 @@ async function configure({
       entry: [
         isDev ? require.resolve('react-dev-utils/webpackHotDevClient') : null,
         require.resolve('./polyfills/client'),
-        /* isDev ? require.resolve('react-error-overlay') : null, */
+        isDev ? require.resolve('react-error-overlay') : null,
         resolvePath(appDir, './client/index.js'),
       ].filter(Boolean),
       output: {
@@ -137,10 +137,9 @@ async function configure({
     },
     server: {
       bail: !isDev,
-      devtool: isDev ? 'eval' : 'source-map',
+      devtool: isDev ? 'inline-source-map' : 'source-map',
       entry: [
         isDev ? require.resolve('source-map-support/register') : null,
-        isDev ? require.resolve('./helpers/serverWrapper') : null,
         require.resolve('./polyfills/server'),
         require.resolve('./helpers/provideVariables'),
         resolvePath(appDir, './server/index.js'),
