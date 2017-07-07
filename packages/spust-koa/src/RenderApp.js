@@ -74,7 +74,7 @@ export function renderHead(head: Head, additionalStylesheets?: Array<Stylesheet>
       )}
       {scripts.map((scriptAttrs, i) =>
         <script
-          key={i}
+          key={`scr-${i}`}
           {...scriptAttrs}
           dangerouslySetInnerHTML={{ __html: scriptAttrs.script }}
         />,
@@ -86,8 +86,12 @@ export function renderHead(head: Head, additionalStylesheets?: Array<Stylesheet>
 export function renderFooter(scripts?: Array<Script> = []): string {
   return renderToStaticMarkup(
     <footer>
-      {scripts.map(scriptAttrs =>
-        <script {...scriptAttrs} dangerouslySetInnerHTML={{ __html: scriptAttrs.script }} />,
+      {scripts.map((scriptAttrs, i) =>
+        <script
+          key={`fscr-${i}`}
+          {...scriptAttrs}
+          dangerouslySetInnerHTML={{ __html: scriptAttrs.script }}
+        />,
       )}
     </footer>,
   ).replace(/<(\/)?footer>/g, '');
