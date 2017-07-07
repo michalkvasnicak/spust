@@ -45,6 +45,7 @@ type Head = {
 
 type Result = {
   body?: string,
+  containerId?: string,
   head?: Head,
   lang?: string,
   scripts?: Array<Script>,
@@ -98,6 +99,7 @@ export default function RenderApp({ render }: Props) {
       use={async ctx => {
         const {
           body = '',
+          containerId = 'app',
           lang = 'en',
           head = {},
           scripts = [],
@@ -111,7 +113,7 @@ export default function RenderApp({ render }: Props) {
 <html lang="${lang}">
   ${renderHead(head, stylesheets)}
   <body>
-    <div id="app">${body}</div>
+    <div id="${containerId}">${body}</div>
     ${renderFooter(scripts)}
   </body>
 </html>
