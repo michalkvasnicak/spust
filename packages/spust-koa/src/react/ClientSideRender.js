@@ -12,13 +12,13 @@ type Props = {
 };
 
 function createRenderer(props: Props) {
-  let assets = loadAssets();
-  let scripts = assets.js.map(src => ({ src }));
-  let stylesheets = assets.css.map(href => ({ href }));
+  let assets;
+  let scripts = [];
+  let stylesheets = [];
 
   return ctx => {
     // load assets everytime during development mode
-    if (process.env.NODE_ENV !== 'production') {
+    if (assets == null || process.env.NODE_ENV !== 'production') {
       assets = loadAssets();
       scripts = assets.js.map(src => ({ src }));
       stylesheets = assets.css.map(href => ({ href }));
