@@ -29,11 +29,11 @@
   },
   "devDependencies": {
     "babel-cli": "^6.24.1",
-    "flow-bin": "^0.48.0",
+    "flow-bin": "^0.49.1",
     "flow-copy-source": "^1.2.0",
     "graphql": "^0.10.3",
     "graphql-server-koa": "^1.0.0",
-    "graphql-tools": "^1.0.0",
+    "graphql-tools": "^1.1.0",
     "prop-types": "^15.5.10",
     "react": "^15.6.1",
     "react-dom": "^15.6.1",

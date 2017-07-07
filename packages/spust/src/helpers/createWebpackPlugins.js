@@ -65,6 +65,8 @@ export default function createWebpackPlugins(
     // watch missing node modules plugin, only dev, both sides
     isDev ? new WatchMissingNodeModulesPlugin() : null,
 
+    !isDev ? new webpack.optimize.ModuleConcatenationPlugin() : null,
+
     // make everything that is pointed from 2 and more places a chunk
     !isDev && !isServer
       ? new webpack.optimize.CommonsChunkPlugin({
