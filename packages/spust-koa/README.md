@@ -1,4 +1,7 @@
-# Spust - Koa
+# spust-koa
+
+[![npm](https://img.shields.io/npm/v/spust-koa.svg)](https://www.npmjs.com/package/spust-koa)
+[![CircleCI](https://circleci.com/gh/michalkvasnicak/spust.svg?style=svg&circle-token=39f82c45c86ac3cd0b5a94f62a1c41919edd86ec)](https://circleci.com/gh/michalkvasnicak/spust)
 
 Write your [Koa 2.0](https://github.com/koajs/koa) backend using JSX and React.
 
