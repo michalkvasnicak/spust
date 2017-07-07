@@ -1,0 +1,11 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`RenderApp works correctly 1`] = `
+"<html lang=\\"en\\">
+  <head><title>Test title</title></head>
+  <body>
+    <div id=\\"root\\"></div>
+    <script src=\\"/static/js/main.d6c4cf02.js\\"></script>
+  </body>
+</html>"
+`;

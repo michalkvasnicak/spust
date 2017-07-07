@@ -14,6 +14,42 @@ npm install spust-koa
 
 ## Usage
 
+### Client side react application
+
+```js
+import ClientSideRender from 'spust-koa/lib/react/ClientSideRender';
+import Server from 'spust-koa/lib/Server';
+import serve from 'spust-koa';
+
+// will start listening automatically
+export default serve(
+  <Server port={3000}>
+    <ClientSideRender />
+  </Server>
+);
+```
+
+### Client side react application with Apollo GraphQL backend
+
+```js
+import ClientSideRender from 'spust-koa/lib/react/ClientSideRender';
+import GraphQL from 'spust-koa/lib/ApolloGraphQL';
+import Server from 'spust-koa/lib/Server';
+import serve from 'spust-koa';
+
+import schema from './yourSchema';
+
+// will start listening automatically
+export default serve(
+  <Server port={3000}>
+    <GraphQL schema={schema} />
+    <ClientSideRender />
+  </Server>
+);
+```
+
+### Custom backend
+
 ```js
 import Middleware from 'spust-koa/lib/Middleware';
 import Server from 'spust-koa/lib/Server';
@@ -133,7 +169,7 @@ See [koa cors's documentation](https://github.com/koajs/cors)
 * `render`: **required prop**, see [documentation](./src/RenderApp.js#55)
   * `ctx`: `Koa2Context`, see [Koa 2.0 context api documentation](https://github.com/koajs/koa/blob/master/docs/api/context.md)
 
-### `Secure<props>`
+### `Secure<Props>`
 
 > Secures your application, see [helmet's documentation](https://www.npmjs.com/search?q=helmet) and [hpp's documentation](https://www.npmjs.com/package/hpp)
 
@@ -163,3 +199,13 @@ See [koa cors's documentation](https://github.com/koajs/cors)
 
 * `store`: `Object` - **required prop**
 * for whole documentation see [koa-session-minimal's documentation](https://www.npmjs.com/package/koa-session-minimal)
+
+### `react/ClientSideRender<Props>`
+
+> Creates HTML page for client side React app
+
+#### Props
+
+* `containerId: string` - optiona prop, react app container element id, default `app`
+* `title: string` - optional prop, page title
+* `lang: string` - optional prop, html lang, default `en`
