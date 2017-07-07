@@ -21,6 +21,7 @@ npm install spust-koa
 
 ```js
 import ClientSideRender from 'spust-koa/lib/react/ClientSideRender';
+import React from 'react';
 import Server from 'spust-koa/lib/Server';
 import serve from 'spust-koa';
 
@@ -37,6 +38,7 @@ export default serve(
 ```js
 import ClientSideRender from 'spust-koa/lib/react/ClientSideRender';
 import GraphQL from 'spust-koa/lib/ApolloGraphQL';
+import React from 'react';
 import Server from 'spust-koa/lib/Server';
 import serve from 'spust-koa';
 
