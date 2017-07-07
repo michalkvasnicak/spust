@@ -171,4 +171,4 @@ In order to use [styled-components v2](https://www.styled-components.com/docs) y
 
 # Examples
 
-* [Micro + React Router v4](https://github.com/michalkvasnicak/spust-examples)
+* [See all examples in separate repository](https://github.com/michalkvasnicak/spust-examples)
