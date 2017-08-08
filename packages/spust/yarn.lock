@@ -2029,13 +2029,6 @@ duplexer@^0.1.1, duplexer@~0.1.1:
   version "0.1.1"
   resolved "https://registry.yarnpkg.com/duplexer/-/duplexer-0.1.1.tgz#ace6ff808c1ce66b57d1ebf97977acb02334cfc1"
 
-each-async@^1.1.1:
-  version "1.1.1"
-  resolved "https://registry.yarnpkg.com/each-async/-/each-async-1.1.1.tgz#dee5229bdf0ab6ba2012a395e1b869abf8813473"
-  dependencies:
-    onetime "^1.0.0"
-    set-immediate-shim "^1.0.0"
-
 ecc-jsbn@~0.1.1:
   version "0.1.1"
   resolved "https://registry.yarnpkg.com/ecc-jsbn/-/ecc-jsbn-0.1.1.tgz#0fc73a9ed5f0d53c38193398523ef7e543777505"
@@ -4115,7 +4108,7 @@ negotiator@0.6.1:
   version "0.6.1"
   resolved "https://registry.yarnpkg.com/negotiator/-/negotiator-0.6.1.tgz#2b327184e8992101177b28563fb5e7102acd0ca9"
 
-netstats@0.0.5:
+netstats@^0.0.5:
   version "0.0.5"
   resolved "https://registry.yarnpkg.com/netstats/-/netstats-0.0.5.tgz#e248693213a97849bee2f8ae21470c6d69c55221"
   dependencies:
@@ -4564,15 +4557,6 @@ pleeease-filters@^3.0.0:
 pluralize@^1.2.1:
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/pluralize/-/pluralize-1.2.1.tgz#d1a21483fd22bb41e58a12fa3421823140897c45"
-
-port-pid@^0.0.6:
-  version "0.0.6"
-  resolved "https://registry.yarnpkg.com/port-pid/-/port-pid-0.0.6.tgz#cecc42c0325774a1be6afe7e5d8e488a2e1450d4"
-  dependencies:
-    each-async "^1.1.1"
-    native-promise-only "^0.8.1"
-    netstats "0.0.5"
-    selective-whitespace "^1.0.0"
 
 portfinder@^1.0.9:
   version "1.0.13"
@@ -5601,7 +5585,7 @@ select-hose@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/select-hose/-/select-hose-2.0.0.tgz#625d8658f865af43ec962bfc376a37359a4994ca"
 
-selective-whitespace@^1.0.0:
+selective-whitespace@^1.0.4:
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/selective-whitespace/-/selective-whitespace-1.0.4.tgz#02d428b46b2c770398be9a538eb442b1e842fc5c"
   dependencies:
@@ -5660,7 +5644,7 @@ set-blocking@^2.0.0, set-blocking@~2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/set-blocking/-/set-blocking-2.0.0.tgz#045f9782d011ae9a6803ddd382b24392b3d890f7"
 
-set-immediate-shim@^1.0.0, set-immediate-shim@^1.0.1:
+set-immediate-shim@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/set-immediate-shim/-/set-immediate-shim-1.0.1.tgz#4b2b1b27eb808a9f8dcc481a58e5e56f599f3f61"
 

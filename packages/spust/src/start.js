@@ -26,7 +26,7 @@ import ServerManager from './ServerProcessManager';
 import type { ServerManagerInterface } from './types';
 
 // crash on unhandledRejection
-process.on('unhandledRejection', err => {
+process.on('unhandledRejection', (err: Error) => {
   throw err;
 });
 
@@ -122,8 +122,14 @@ async function start(dir: string, sourceDir: string) {
 
     const [clientStats, serverStats] = stats.stats;
 
-    const clientMessages = formatWebpackMessages(clientStats.toJson({}, true));
-    const serverMessages = formatWebpackMessages(serverStats.toJson({}, true));
+    const clientMessages: {
+      errors: Array<string>,
+      warnings: Array<string>,
+    } = formatWebpackMessages(clientStats.toJson({}, true));
+    const serverMessages: {
+      errors: Array<string>,
+      warnings: Array<string>,
+    } = formatWebpackMessages(serverStats.toJson({}, true));
 
     if (clientMessages.errors.length || serverMessages.errors.length) {
       console.log(chalk.red('⚠️  Failed to compile.\n'));
@@ -177,6 +183,9 @@ async function start(dir: string, sourceDir: string) {
       // print nice info :)
       printInstructions(urls);
     }
+
+    // clear last spawn errors
+    serverManager.clearSpawnErrors();
 
     // set flag that it has been successfully compiled
     // so in next builds it will result to Updated and not Compiled
