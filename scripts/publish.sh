@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 # test everything
 yarn run lint
 yarn run flow
