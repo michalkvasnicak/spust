@@ -1,5 +1,6 @@
 [ignore]
 
+.*/node_modules/kefir/.*
 .*/node_modules/conventional-changelog-core/.*
 .*/node_modules/eslint-plugin-jsx-a11y/.*
 
