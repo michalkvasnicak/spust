@@ -23,6 +23,7 @@ import configure from './configure';
 import printInstructions from './printInstructions';
 import Progress from './Progress';
 import ServerManager from './ServerProcessManager';
+import { UnexpectedServerTerminationError, ServerSpawnFailureError } from './spawnServer';
 import type { ServerManagerInterface } from './types';
 
 // crash on unhandledRejection
@@ -158,14 +159,39 @@ async function start(dir: string, sourceDir: string) {
     if (!serverManager.isRunning()) {
       if (serverManager.lastSpawnErrors().length > 0) {
         console.log(chalk.red('⚠️  Server is not running, see errors:\n'));
-        console.log(serverManager.lastSpawnErrors().join('\n'));
+
+        serverManager.lastSpawnErrors().forEach(e => {
+          console.log(e.message);
+          console.log();
+
+          if (e instanceof UnexpectedServerTerminationError) {
+            console.log(e.stderr);
+          } else if (e instanceof ServerSpawnFailureError) {
+            console.log(e.stderr);
+          }
+
+          console.log();
+        });
       } else {
         console.log(chalk.red('⚠️  Server is not running because of an unkown error!\n'));
       }
     } else {
       if (serverManager.lastSpawnErrors().length > 0) {
         console.log(chalk.red('⚠️  Failed to spawn a new server for your backend, see errors:\n'));
-        console.log(serverManager.lastSpawnErrors().join('\n\n'));
+
+        serverManager.lastSpawnErrors().forEach(e => {
+          console.log(e.message);
+          console.log();
+
+          if (e instanceof UnexpectedServerTerminationError) {
+            console.log(e.stderr);
+          } else if (e instanceof ServerSpawnFailureError) {
+            console.log(e.stderr);
+          }
+
+          console.log();
+        });
+
         console.log(chalk.cyan('ℹ️  Keeping previous server running.'));
       }
 
