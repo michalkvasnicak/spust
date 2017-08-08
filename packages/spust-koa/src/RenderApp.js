@@ -67,7 +67,9 @@ export function renderHead(head: Head, additionalStylesheets?: Array<Stylesheet>
     <head>
       {head.base && <base {...head.base} />}
       {metaTags.map((tag, i) => <meta key={i} {...tag} />)}
-      <title>{head.title}</title>
+      <title>
+        {head.title}
+      </title>
       {links.map((linkAttrs, i) => <link key={i} {...linkAttrs} />)}
       {stylesheets.map((stylesheetAttrs, i) =>
         <link key={`s-${i}`} {...stylesheetAttrs} rel={stylesheetAttrs.rel || 'stylesheet'} />,
