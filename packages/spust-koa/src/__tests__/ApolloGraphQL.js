@@ -22,7 +22,7 @@ const schema = makeExecutableSchema({
   `,
   resolvers: {
     Query: {
-      hello: (parent, args, context) => (context ? context.hello : 1),
+      hello: (parent, args, context) => context.hello || 1,
     },
   },
 });

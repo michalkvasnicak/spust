@@ -120,6 +120,7 @@ async function configure({
         rules: createWebpackLoaders({ appDir, isDev, isServer: false, useBabili }, envVariables),
       },
       node: {
+        dgram: 'empty',
         fs: 'empty',
         net: 'empty',
         tls: 'empty',
