@@ -1,7 +1,7 @@
 {
   "name": "spust-koa",
   "description": "Write your Spust Koa backend server using JSX and React.",
-  "version": "0.3.2",
+  "version": "1.0.0",
   "license": "MIT",
   "keywords": [
     "spust",
@@ -25,7 +25,7 @@
     "koa-connect": "^2.0.0",
     "koa-session-minimal": "^3.0.4",
     "koa-static-cache": "^5.1.1",
-    "spust": "^0.18.1"
+    "spust": "^1.0.0"
   },
   "devDependencies": {
     "babel-cli": "^6.24.1",
