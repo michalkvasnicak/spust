@@ -42,8 +42,9 @@ export function createAsyncRequireLoader() {
     getScripts(requiredFiles: Array<string>): Array<string> {
       return requiredFiles.reduce((result, requiredFile) => {
         const file = requiredFile + '.js';
+        const indexFile = requiredFile + '/index.js';
 
-        const bundles = loadedAssets.modules[file];
+        const bundles = loadedAssets.modules[file] || loadedAssets.modules[indexFile];
 
         if (bundles == null) {
           return result;
