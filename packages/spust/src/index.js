@@ -56,7 +56,8 @@ export function createAsyncRequireLoader() {
             return processed;
           }
 
-          return [...files.reverse(), ...processed];
+          // allow only js files
+          return [...files.filter(fileName => fileName.endsWith('js')).reverse(), ...processed];
         }, []);
 
         return [...scripts, ...result];
