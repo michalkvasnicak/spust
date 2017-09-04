@@ -41,7 +41,7 @@ export default class AssetsPlugin {
         });
 
         json.chunks.forEach(chunk => {
-          bundles[chunk.id] = chunk.files;
+          bundles[chunk.id] = chunk.files.map(file => publicPath + file);
         });
 
         initialChunks.forEach(chunk => {
