@@ -1,1 +1,22 @@
-{"main":{"css":[],"js":["/static/js/main.d6c4cf02.js"]}}
+{
+  "entryPoints": { "main": { "css": [], "js": ["/static/js/main.d6c4cf02.js"] } },
+  "modules": {
+    "/Users/Michal/Work/Brosoft/spust/packages/spust/node_modules/promise/lib/core.js": [0],
+    "multi /Users/Michal/Work/Brosoft/spust/packages/spust/scripts/polyfills/client.js /Users/Michal/Work/Brosoft/spust/packages/spust/fixtures/test/client/index.js": [
+      0
+    ],
+    "/Users/Michal/Work/Brosoft/spust/packages/spust/scripts/polyfills/client.js": [0],
+    "/Users/Michal/Work/Brosoft/spust/packages/spust/node_modules/promise/lib/rejection-tracking.js": [
+      0
+    ],
+    "/Users/Michal/Work/Brosoft/spust/packages/spust/node_modules/asap/browser-raw.js": [0],
+    "/Users/Michal/Work/Brosoft/spust/packages/spust/node_modules/webpack/buildin/global.js": [0],
+    "/Users/Michal/Work/Brosoft/spust/packages/spust/node_modules/promise/lib/es6-extensions.js": [
+      0
+    ],
+    "/Users/Michal/Work/Brosoft/spust/packages/spust/node_modules/whatwg-fetch/fetch.js": [0],
+    "/Users/Michal/Work/Brosoft/spust/packages/spust/node_modules/object-assign/index.js": [0],
+    "/Users/Michal/Work/Brosoft/spust/packages/spust/fixtures/test/client/index.js": [0]
+  },
+  "bundles": { "0": ["static/js/main.9baf8c5e.js", "static/js/main.9baf8c5e.js.map"] }
+}
