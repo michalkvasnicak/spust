@@ -31,6 +31,18 @@ export default class AssetsPlugin {
         const initialChunks = json.chunks.filter(chunk => chunk.initial);
         const chunks = {};
         const entryPoints = {};
+        const modules = {};
+        const bundles = {};
+
+        json.modules.forEach(module => {
+          const parts = module.identifier.split('!');
+          const filePath = parts[parts.length - 1];
+          modules[filePath] = module.chunks;
+        });
+
+        json.chunks.forEach(chunk => {
+          bundles[chunk.id] = chunk.files;
+        });
 
         initialChunks.forEach(chunk => {
           chunks[chunk.id] = chunk;
@@ -80,7 +92,11 @@ export default class AssetsPlugin {
         mkdirp.sync(this.bundlePath);
         writeFileSync(
           path.resolve(this.bundlePath, this.assetsFilename),
-          JSON.stringify(entryPoints),
+          JSON.stringify({
+            entryPoints,
+            modules,
+            bundles,
+          }),
         );
       } catch (e) {
         cb(e);
