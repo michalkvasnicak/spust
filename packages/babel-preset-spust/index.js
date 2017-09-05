@@ -150,7 +150,7 @@ const serverEnvPresets = [
 
 const serverPlugins = [];
 
-if (!supportReactLoadable) {
+if (!supportReactLoadable || env === 'test') {
   serverPlugins.push(require.resolve('babel-plugin-dynamic-import-node'));
 }
 
