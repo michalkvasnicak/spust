@@ -3,7 +3,7 @@
 import { fork, type ChildProcess } from 'child_process';
 import find from './helpers/portPid';
 
-export function sleep(timeout: number) {
+export function sleep(timeout: number): Promise<void> {
   return new Promise(resolve => setTimeout(resolve, timeout));
 }
 
